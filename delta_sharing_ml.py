@@ -7,22 +7,28 @@ table_name = "vuongnguyen.default.delta_sharing_ml"
 import shutil, os
 import pickle
 import mlflow
+import pandas as pd
+from typing import Iterator
 from mlflow.tracking import MlflowClient
-from pyspark.sql.functions import udf
+from pyspark.sql.functions import udf, pandas_udf
 from pyspark.sql.types import BinaryType, MapType, StringType
 
 # COMMAND ----------
 
-@udf(returnType=BinaryType()) 
-def pickled_model(model_path: str) -> bytes:
-    return pickle.dumps(mlflow.pyfunc.load_model(model_path))
+@pandas_udf(BinaryType())
+def pickled_model(model_paths: pd.Series) -> pd.Series:
+    model_path = model_paths[0]
+    return pd.Series([pickle.dumps(mlflow.pyfunc.load_model(model_path))], index=['model_payload'])
 
 # COMMAND ----------
 
-@udf(returnType=MapType(StringType(), BinaryType()))
-def pickled_artifacts(run_id: str)-> dict:
+@pandas_udf(MapType(StringType(), BinaryType()))
+def pickled_artifacts(run_ids: pd.Series)-> pd.Series:
+    run_id = run_ids[0]
     client = MlflowClient()
     artifacts = client.list_artifacts(run_id)
+    artifacts_binary = {}
+    
     if len(artifacts) > 0: # Because of https://github.com/mlflow/mlflow/issues/2839
         local_dir = "/tmp/artifact_downloads"
         if os.path.exists(local_dir):
@@ -30,14 +36,11 @@ def pickled_artifacts(run_id: str)-> dict:
         os.mkdir(local_dir)
         local_path = client.download_artifacts(run_id, "", dst_path = local_dir)
         artifact_paths = [os.path.join(path, file) for path, currentDirectory, files in os.walk(local_path) for file in files]
-        artifacts_binary = {}
         for path in artifact_paths:
             with open(path, mode='rb') as file: # b -> binary
                 content = file.read()
                 artifacts_binary[path] = content
-        return artifacts_binary
-    else:
-        return {}
+    return pd.Series([artifacts_binary], index=['artifact_payload'])
 
 # COMMAND ----------
 
@@ -52,7 +55,7 @@ from pyspark.sql.functions import concat, col, lit, create_map
 models = (runs_df
           .withColumn("model_path", concat(lit("runs:/"), col("run_id"), lit("/model")))
           .withColumn("metadata", create_map(lit('reader_class'), lit('mlflow'), lit('file_format'), lit('mlflow')))
-          .withColumn("model_payload", pickled_model("model_path"))
+          .withColumn("model_payload", pickled_model(col("model_path")))
           .withColumn("artifact_payload", pickled_artifacts("run_id"))          
          )
 
