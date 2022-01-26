@@ -1,4 +1,8 @@
 # Databricks notebook source
+# MAGIC %pip install delta-sharing
+
+# COMMAND ----------
+
 # MAGIC %sql
 # MAGIC CREATE SHARE IF NOT EXISTS ml_sharing COMMENT "Sharing ML models using Delta Sharing"
 
@@ -23,21 +27,13 @@ dbutils.fs.mv("file:/tmp/ml_sharing_recipient.share", "dbfs:/FileStore/ml_sharin
 
 # COMMAND ----------
 
-import numpy as np
-import pandas as pd
-import dill
+from mlpickling import load_delta_sharing_ml_model
 
 # COMMAND ----------
 
 profile_file = '/FileStore/ml_sharing_recipient.share'
 table_url = f"{profile_file}#ml_sharing.default.delta_sharing_ml"
 
-shared_models = spark.read.format('deltaSharing').load(table_url)
-
-display(shared_models)
-
-# COMMAND ----------
-
-my_model = dill.loads(shared_models.collect()[0]["model_payload"])
+my_model = load_delta_sharing_ml_model(table_url)
 input_df = spark.read.table("main.default.adult").toPandas()
 my_model.predict(input_df)
