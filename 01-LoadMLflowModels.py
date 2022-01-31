@@ -1,11 +1,15 @@
 # Databricks notebook source
+# MAGIC %pip install -r requirements.txt
+
+# COMMAND ----------
+
 #experiment_name = "/Users/milos.colic@databricks.com/databricks_automl/Churn_auto_ml_data-2021_10_20-08_40"
 experiment_name = "/Users/vuong.nguyen+uc@databricks.com/databricks_automl/22-01-25-16:05-automl-classification-example-4b509c14/automl-classification-example-Experiment-4b509c14"
 table_name = "vuongnguyen.default.delta_sharing_ml"
 
 # COMMAND ----------
 
-from mlpickling import normalize_mlflow_df
+from delta_sharing_mlflow import normalize_mlflow_df
 
 # COMMAND ----------
 

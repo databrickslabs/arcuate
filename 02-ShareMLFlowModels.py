@@ -1,5 +1,5 @@
 # Databricks notebook source
-# MAGIC %pip install delta-sharing
+# MAGIC %pip install -r requirements.txt
 
 # COMMAND ----------
 
@@ -27,7 +27,7 @@ dbutils.fs.mv("file:/tmp/ml_sharing_recipient.share", "dbfs:/FileStore/ml_sharin
 
 # COMMAND ----------
 
-from mlpickling import load_delta_sharing_ml_model
+from delta_sharing_mlflow import load_delta_sharing_ml_model
 
 # COMMAND ----------
 
