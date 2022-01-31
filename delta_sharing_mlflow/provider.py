@@ -36,10 +36,13 @@ def pickle_artifacts_udf(run_ids: pd.Series)-> pd.Series:
     return run_ids.apply(pickle_artifacts)
 
 def normalize_mlflow_df(experiment_infos_df: DataFrame) -> DataFrame:
-    metrics_subschema = [cn for cn in experiment_infos_df.columns if "metrics." in cn]
-    params_subschema  = [cn for cn in experiment_infos_df.columns if "params." in cn]
-    tags_subschema    = [cn for cn in experiment_infos_df.columns if "tags." in cn]
-    run_info_subschema = [cn for cn in experiment_infos_df.columns if cn not in tags_subschema + params_subschema + metrics_subschema]
+    # now ignore a few columns
+    ignored_cols = ["mlflow.user", "databricks.notebookID", "artifact_uri"]
+    columns = [cn for cn in experiment_infos_df.columns if not any(ignored in cn for ignored in ignored_cols)]
+    metrics_subschema = [cn for cn in columns if "metrics." in cn]
+    params_subschema  = [cn for cn in columns if "params." in cn]
+    tags_subschema    = [cn for cn in columns if "tags." in cn and "mlflow.user" not in cn and "databricks.notebookID" not in cn]
+    run_info_subschema = [cn for cn in columns if cn not in tags_subschema + params_subschema + metrics_subschema]
     return (experiment_infos_df
               .select(
                   F.struct(*[F.col(cn) for cn in run_info_subschema]).alias("run_info"),
@@ -56,5 +59,5 @@ def normalize_mlflow_df(experiment_infos_df: DataFrame) -> DataFrame:
                       F.array(*[F.col(f"`{cn}`") for cn in tags_subschema])
                   ).alias("tags"))
               .withColumn("model_payload", pickle_model_udf("run_info.run_id"))
-              .withColumn("artifact_payload", pickle_artifacts_udf("run_info.run_id")) 
+              .withColumn("artifact_payload", pickle_artifacts_udf("run_info.run_id"))
              )
