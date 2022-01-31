@@ -6,7 +6,6 @@ from mlflow.tracking import MlflowClient
 from pyspark.sql import functions as F
 from pyspark.sql.types import BinaryType, MapType, StringType
 from pyspark.sql import DataFrame
-import delta_sharing
 
 @F.pandas_udf(BinaryType())
 def pickle_model_udf(model_paths: pd.Series) -> pd.Series:
@@ -59,7 +58,3 @@ def normalize_mlflow_df(experiment_infos_df: DataFrame) -> DataFrame:
               .withColumn("model_payload", pickle_model_udf("run_info.run_id"))
               .withColumn("artifact_payload", pickle_artifacts_udf("run_info.run_id")) 
              )
-
-def load_delta_sharing_ml_model(table_url: str):
-    shared_models = delta_sharing.load_as_spark(table_url)
-    return cloudpickle.loads(shared_models.collect()[0]["model_payload"])
