@@ -1,5 +1,5 @@
 # Databricks notebook source
-# MAGIC %pip install -r requirements.txt
+# MAGIC %pip install -r ../requirements.txt
 
 # COMMAND ----------
 
@@ -27,13 +27,13 @@ dbutils.fs.mv("file:/tmp/ml_sharing_recipient.share", "dbfs:/FileStore/ml_sharin
 
 # COMMAND ----------
 
-from delta_sharing_mlflow import load_delta_sharing_ml_model
+import delta_sharing_mlflow
 
 # COMMAND ----------
 
 profile_file = '/FileStore/ml_sharing_recipient.share'
 table_url = f"{profile_file}#ml_sharing.default.delta_sharing_ml"
 
-my_model = load_delta_sharing_ml_model(table_url)
+my_model = delta_sharing_mlflow.load_delta_sharing_ml_model(table_url)
 input_df = spark.read.table("main.default.adult").toPandas()
 my_model.predict(input_df)

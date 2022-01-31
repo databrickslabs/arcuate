@@ -1,5 +1,5 @@
 # Databricks notebook source
-# MAGIC %pip install -r requirements.txt
+# MAGIC %pip install -r ../requirements.txt
 
 # COMMAND ----------
 
@@ -9,7 +9,7 @@ table_name = "vuongnguyen.default.delta_sharing_ml"
 
 # COMMAND ----------
 
-from delta_sharing_mlflow import normalize_mlflow_df
+import delta_sharing_mlflow
 
 # COMMAND ----------
 
@@ -27,7 +27,7 @@ display(experiment_infos_df)
 
 # COMMAND ----------
 
-normalized = normalize_mlflow_df(experiment_infos_df)
+normalized = delta_sharing_mlflow.normalize_mlflow_df(experiment_infos_df)
 
 # COMMAND ----------
 
