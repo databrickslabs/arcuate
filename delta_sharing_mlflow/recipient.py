@@ -3,13 +3,15 @@ import cloudpickle
 import json
 import sys
 from mlflow.models.signature import ModelSignature
+from mlflow.tracking import MlflowClient
 from itertools import islice
 import mlflow
 import os
 import shutil
 import random
 import string
-
+import multiprocessing as mp
+import numpy as np
 
 def write_and_log_artifacts(artifacts):
     random_suffix = ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
@@ -31,9 +33,7 @@ def chunks(data, SIZE=10000):
     for _ in range(0, len(data), SIZE):
         yield {k: data[k] for k in islice(it, SIZE)}
 
-
-def import_models(df, experiment_name):
-    experiment_id = mlflow.create_experiment(experiment_name)
+def import_model(df, experiment_id):
     for _, row in df.iterrows():
         with mlflow.start_run(experiment_id=experiment_id):
             tags = dict(row["tags"])
@@ -58,4 +58,21 @@ def import_models(df, experiment_name):
             sys.modules[model_loader].log_model(
                 model, artifact_path, signature=signature
             )
-            write_and_log_artifacts(dict(row["artifact_payload"]))
+            write_and_log_artifacts(dict(row["artifact_payload"]))    
+        
+def import_models(df, experiment_name):
+    try:
+        experiment_id = mlflow.create_experiment(experiment_name)
+    except:
+        client = MlflowClient()
+        experiment_id = client.get_experiment_by_name(experiment_name).experiment_id
+    
+    parallel = mp.cpu_count()
+    dfs = np.array_split(df, parallel)
+    
+    with mp.Pool(parallel) as p:
+        for d in dfs:
+            p.apply_async(import_model, args = (d, experiment_id))
+        p.close()
+        p.join()   
+        
