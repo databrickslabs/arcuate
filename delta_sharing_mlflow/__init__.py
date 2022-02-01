@@ -14,6 +14,7 @@ __all__ = [
     "chunks",
     "import_models",
     "arcuate_parse",
+    "ArcuateMagic",
     "__version__",
 ]
 
