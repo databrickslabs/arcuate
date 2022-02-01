@@ -44,11 +44,11 @@ def pickle_artifacts_udf(run_ids: pd.Series)-> pd.Series:
 
 def normalize_mlflow_df(experiment_infos_df: DataFrame) -> DataFrame:
     # now ignore a few columns
-    ignored_cols = ["mlflow.user", "databricks.notebookID", "artifact_uri"]
+    ignored_cols = ["mlflow.user", "databricks.notebookID", "artifact_uri", "mlflow.source.name"]
     columns = [cn for cn in experiment_infos_df.columns if not any(ignored in cn for ignored in ignored_cols)]
     metrics_subschema = [cn for cn in columns if "metrics." in cn]
     params_subschema  = [cn for cn in columns if "params." in cn]
-    tags_subschema    = [cn for cn in columns if "tags." in cn and "mlflow.user" not in cn and "databricks.notebookID" not in cn]
+    tags_subschema    = [cn for cn in columns if "tags." in cn]
     run_info_subschema = [cn for cn in columns if cn not in tags_subschema + params_subschema + metrics_subschema]
     return (experiment_infos_df
               .select(
