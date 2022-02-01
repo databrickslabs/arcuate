@@ -1,7 +1,7 @@
 from IPython.core.magic import Magics, magics_class, cell_magic
-from provider import export_models
-from recipient import import_models
-from parser import arcuate_parse
+from delta_sharing_mlflow.provider import export_models
+from delta_sharing_mlflow.recipient import import_models
+from delta_sharing_mlflow.parser import arcuate_parse
 
 @magics_class
 class ArcuateMagic(Magics):
