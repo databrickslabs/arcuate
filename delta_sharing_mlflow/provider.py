@@ -61,3 +61,16 @@ def normalize_mlflow_df(experiment_infos_df: DataFrame) -> DataFrame:
               .withColumn("model_payload", pickle_model_udf("run_info.run_id"))
               .withColumn("artifact_payload", pickle_artifacts_udf("run_info.run_id"))
              )
+
+def export_models(experiment_name:str, table_name:str, share_name:str):
+    client = MlflowClient()
+    experiment = client.get_experiment_by_name(experiment_name)
+    experiment_infos = mlflow.search_runs(experiment.experiment_id, filter_string="tags.mlflow.runName != 'Training Data Storage and Analysis'")
+    experiment_infos_df = spark.createDataFrame(experiment_infos)
+
+    normalized = normalize_mlflow_df(experiment_infos_df)
+
+    normalized.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(table_name)
+
+    spark.sql(f"CREATE SHARE IF NOT EXISTS {share_name}")
+    spark.sql(f"ALTER SHARE ml_sharing ADD TABLE {table_name}")
