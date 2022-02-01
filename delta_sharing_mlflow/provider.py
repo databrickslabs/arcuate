@@ -1,4 +1,4 @@
-import shutil, os
+import shutil, os, random, string
 import cloudpickle
 import mlflow
 import pandas as pd
@@ -15,23 +15,28 @@ def pickle_model_udf(model_paths: pd.Series) -> pd.Series:
 
 @F.pandas_udf(MapType(StringType(), BinaryType()))
 def pickle_artifacts_udf(run_ids: pd.Series)-> pd.Series:
-    client = MlflowClient()
     def pickle_artifacts(run_id: str):
         client = MlflowClient()
         artifacts = client.list_artifacts(run_id)
         artifacts_binary = {}
+        
+        # ignore the ML model
+        ignored_paths = ["model/MLModel", "model/model.pkl", "model/requirements.txt", "model/conda.yaml"]
 
         if len(artifacts) > 0: # Because of https://github.com/mlflow/mlflow/issues/2839
-            local_dir = "/tmp/artifact_downloads"
+            local_dir = "/tmp/artifact_downloads" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
             if os.path.exists(local_dir):
                 shutil.rmtree(local_dir)
             os.mkdir(local_dir)
             local_path = client.download_artifacts(run_id, "", dst_path = local_dir)
-            artifact_paths = [os.path.join(path, file) for path, currentDirectory, files in os.walk(local_path) for file in files]
+            artifact_paths = [os.path.join(path, file) for path, _, files in os.walk(local_path) for file in files]
             for path in artifact_paths:
-                with open(path, mode='rb') as file: # b -> binary
-                    content = file.read()
-                    artifacts_binary[path] = content
+                if not any(ignored in path for ignored in ignored_paths):
+                    with open(path, mode='rb') as file: # b -> binary
+                        content = file.read()
+                        relative_path = path.replace(local_dir, '')
+                        artifacts_binary[relative_path] = content
+            shutil.rmtree(local_dir)
         return artifacts_binary
     return run_ids.apply(pickle_artifacts)
 
