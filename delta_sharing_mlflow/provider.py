@@ -24,7 +24,8 @@ def pickle_artifacts_udf(run_ids: pd.Series)-> pd.Series:
         ignored_paths = ["model/MLModel", "model/model.pkl", "model/requirements.txt", "model/conda.yaml"]
 
         if len(artifacts) > 0: # Because of https://github.com/mlflow/mlflow/issues/2839
-            local_dir = "/tmp/artifact_downloads" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
+            random_suffix = ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
+            local_dir = f"/tmp/{random_suffix}/artifact_downloads/"
             if os.path.exists(local_dir):
                 shutil.rmtree(local_dir)
             os.mkdir(local_dir)
