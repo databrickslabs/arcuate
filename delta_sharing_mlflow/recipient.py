@@ -7,16 +7,23 @@ from itertools import islice
 import mlflow
 import os
 import shutil
+import random
+import string
 
 
 def write_and_log_artifacts(artifacts):
-    os.mkdir("/tmp_artifacts")
-    for key, value in artifacts.items():
-        f = open(f"/tmp_artifacts/{key.split('/')[-1]}", "wb")
-        f.write(value)
+    random_suffix = ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
+    local_dir = f"/tmp/{random_suffix}"
+    if os.path.exists(local_dir):
+        shutil.rmtree(local_dir)
+    os.mkdir(local_dir)
+    os.mkdir(f'{local_dir}/model')    
+    for path, content in artifacts.items():
+        f = open(f"{local_dir}/{path}", "wb")
+        f.write(content)
         f.close()
-    mlflow.log_artifacts("/tmp_artifacts")
-    shutil.rmtree("/tmp_artifacts")
+    mlflow.log_artifacts(local_dir)
+    shutil.rmtree(local_dir)
 
 
 def chunks(data, SIZE=10000):
@@ -29,7 +36,7 @@ def import_models(df, experiment_name):
     experiment_id = mlflow.create_experiment(experiment_name)
     for _, row in df.iterrows():
         with mlflow.start_run(experiment_id=experiment_id):
-            tags = row["tags"]
+            tags = dict(row["tags"])
             mlflow_log_model_history = json.loads(tags["mlflow.log-model.history"])[
                 -1
             ]  # I dont think we know which is the latest
@@ -40,10 +47,10 @@ def import_models(df, experiment_name):
             signature = ModelSignature.from_dict(mlflow_log_model_history["signature"])
             tags.pop("mlflow.log-model.history", None)
             mlflow.set_tags(tags)
-            metrics = row["metrics"]
+            metrics = dict(row["metrics"])
             for chunk in chunks(metrics, 90):
                 mlflow.log_metrics(chunk)
-            params = row["params"]
+            params = dict(row["params"])
             for chunk in chunks(params, 90):
                 mlflow.log_params(chunk)
             model_payload = row["model_payload"]
@@ -51,4 +58,4 @@ def import_models(df, experiment_name):
             sys.modules[model_loader].log_model(
                 model, artifact_path, signature=signature
             )
-            write_and_log_artifacts(row["artifact_payload"])
+            write_and_log_artifacts(dict(row["artifact_payload"]))

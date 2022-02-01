@@ -30,7 +30,7 @@ def arcuate_parse(in_query: str) -> List[str]:
 
     tokens = sqlparse.parse(query)[0].tokens
     ids = [
-        item.value
+        item.value.replace("'", "")
         for item in tokens
         if (
             str(item.ttype) == "Token.Literal.String.Single"

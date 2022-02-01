@@ -9,30 +9,23 @@ table_name = "vuongnguyen.default.delta_sharing_ml"
 
 # COMMAND ----------
 
-import delta_sharing_mlflow
+from delta_sharing_mlflow import ArcuateMagic
+
+ip = get_ipython()
+print("Adding Magic to support %python %%arcuate_export")
+ip.register_magics(ArcuateMagic)
 
 # COMMAND ----------
 
-from mlflow.tracking import MlflowClient
-import mlflow
-
-client = MlflowClient()
-experiment = client.get_experiment_by_name(experiment_name)
-experiment_infos = mlflow.search_runs(experiment.experiment_id, filter_string="tags.mlflow.runName != 'Training Data Storage and Analysis'")
-experiment_infos_df = spark.createDataFrame(experiment_infos)
+# MAGIC %sql
+# MAGIC create catalog if not exists vuongnguyen
 
 # COMMAND ----------
 
-display(experiment_infos_df)
+# MAGIC %%arcuate_export 
+# MAGIC create share 'ml_sharing' with table 'vuongnguyen.default.delta_sharing_ml' from experiment '/Users/vuong.nguyen+uc@databricks.com/databricks_automl/22-01-25-16:05-automl-classification-example-4b509c14/automl-classification-example-Experiment-4b509c14'
 
 # COMMAND ----------
 
-normalized = delta_sharing_mlflow.normalize_mlflow_df(experiment_infos_df)
-
-# COMMAND ----------
-
-display(normalized)
-
-# COMMAND ----------
-
-normalized.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(table_name)
+# MAGIC %sql
+# MAGIC select * from vuongnguyen.default.delta_sharing_ml

@@ -3,6 +3,7 @@ import cloudpickle
 import mlflow
 import pandas as pd
 from mlflow.tracking import MlflowClient
+from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 from pyspark.sql.types import BinaryType, MapType, StringType
 from pyspark.sql import DataFrame
@@ -21,11 +22,11 @@ def pickle_artifacts_udf(run_ids: pd.Series)-> pd.Series:
         artifacts_binary = {}
         
         # ignore the ML model
-        ignored_paths = ["model/MLModel", "model/model.pkl", "model/requirements.txt", "model/conda.yaml"]
+        ignored_paths = ["model/MLmodel", "model/model.pkl", "model/requirements.txt", "model/conda.yaml"]
 
         if len(artifacts) > 0: # Because of https://github.com/mlflow/mlflow/issues/2839
             random_suffix = ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
-            local_dir = f"/tmp/{random_suffix}/artifact_downloads/"
+            local_dir = f"/tmp/{random_suffix}/"
             if os.path.exists(local_dir):
                 shutil.rmtree(local_dir)
             os.mkdir(local_dir)
@@ -70,6 +71,8 @@ def normalize_mlflow_df(experiment_infos_df: DataFrame) -> DataFrame:
 
 def export_models(experiment_name:str, table_name:str, share_name:str):
     client = MlflowClient()
+    spark = SparkSession.builder.getOrCreate()
+    
     experiment = client.get_experiment_by_name(experiment_name)
     experiment_infos = mlflow.search_runs(experiment.experiment_id, filter_string="tags.mlflow.runName != 'Training Data Storage and Analysis'")
     experiment_infos_df = spark.createDataFrame(experiment_infos)
