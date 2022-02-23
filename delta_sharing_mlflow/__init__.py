@@ -18,3 +18,7 @@ __all__ = [
     "__version__",
 ]
 
+ip = get_ipython()
+print("Adding Magic to support %python %%arcuate_export_model, %%arcuate_export_experiment, %%arcuate_export_experiment, %%arcuate_import")
+ip.register_magics(ArcuateMagic)
+

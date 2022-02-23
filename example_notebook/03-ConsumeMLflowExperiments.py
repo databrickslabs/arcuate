@@ -6,10 +6,6 @@
 import delta_sharing
 from delta_sharing_mlflow import ArcuateMagic
 
-ip = get_ipython()
-print("Adding Magic to support %python %%arcuate_export")
-ip.register_magics(ArcuateMagic)
-
 # COMMAND ----------
 
 profile_file = '/dbfs/FileStore/ml_sharing_recipient.share'
