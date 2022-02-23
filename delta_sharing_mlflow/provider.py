@@ -5,13 +5,19 @@ import pandas as pd
 from mlflow.tracking import MlflowClient
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
-from pyspark.sql.types import BinaryType, MapType, StringType
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType, TimestampType, BinaryType, MapType
 from pyspark.sql import DataFrame
+
+@F.pandas_udf(BinaryType())
+def pickle_run_model_udf(model_paths: pd.Series) -> pd.Series:
+    def pickle_model(model_path: str) -> bytes:
+        return cloudpickle.dumps(mlflow.pyfunc.load_model(f"runs:/{model_path}/model"))
+    return model_paths.apply(pickle_model)
 
 @F.pandas_udf(BinaryType())
 def pickle_model_udf(model_paths: pd.Series) -> pd.Series:
     def pickle_model(model_path: str) -> bytes:
-        return cloudpickle.dumps(mlflow.pyfunc.load_model(f"runs:/{model_path}/model"))
+        return cloudpickle.dumps(mlflow.pyfunc.load_model(f"models:/{model_path}"))
     return model_paths.apply(pickle_model)
 
 @F.pandas_udf(MapType(StringType(), BinaryType()))
@@ -42,7 +48,7 @@ def pickle_artifacts_udf(run_ids: pd.Series)-> pd.Series:
         return artifacts_binary
     return run_ids.apply(pickle_artifacts)
 
-def normalize_mlflow_df(experiment_infos_df: DataFrame) -> DataFrame:
+def normalize_experiment_df(experiment_infos_df: DataFrame) -> DataFrame:
     # now ignore a few columns
     ignored_cols = ["mlflow.user", "databricks.notebookID", "artifact_uri", "mlflow.source.name"]
     columns = [cn for cn in experiment_infos_df.columns if not any(ignored in cn for ignored in ignored_cols)]
@@ -65,11 +71,11 @@ def normalize_mlflow_df(experiment_infos_df: DataFrame) -> DataFrame:
                       F.array(*[F.lit(cn.replace("tags.", "")) for cn in tags_subschema]),
                       F.array(*[F.col(f"`{cn}`") for cn in tags_subschema])
                   ).alias("tags"))
-              .withColumn("model_payload", pickle_model_udf("run_info.run_id"))
+              .withColumn("model_payload", pickle_run_model_udf("run_info.run_id"))
               .withColumn("artifact_payload", pickle_artifacts_udf("run_info.run_id"))
              )
 
-def export_models(experiment_name:str, table_name:str, share_name:str):
+def export_experiments(experiment_name:str, table_name:str, share_name:str):
     client = MlflowClient()
     spark = SparkSession.builder.getOrCreate()
     
@@ -77,9 +83,44 @@ def export_models(experiment_name:str, table_name:str, share_name:str):
     experiment_infos = mlflow.search_runs(experiment.experiment_id, filter_string="tags.mlflow.runName != 'Training Data Storage and Analysis'")
     experiment_infos_df = spark.createDataFrame(experiment_infos)
 
-    normalized = normalize_mlflow_df(experiment_infos_df)
+    normalized = normalize_experiment_df(experiment_infos_df)
 
     normalized.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(table_name)
 
     spark.sql(f"CREATE SHARE IF NOT EXISTS {share_name}")
-    spark.sql(f"ALTER SHARE ml_sharing ADD TABLE {table_name}")
+    try:
+        spark.sql(f"ALTER SHARE {share_name} ADD TABLE {table_name}")
+    except Exception:
+        pass
+    
+def export_models(model_name:str, table_name:str, share_name:str):
+    client = MlflowClient()
+    spark = SparkSession.builder.getOrCreate()
+    
+    model_version_infos = client.search_model_versions(f"name = '{model_name}'")
+    
+    schema = StructType([
+        StructField("version", IntegerType(), True),
+        StructField("description", StringType(), True),
+        StructField("current_stage", StringType(), True),  
+        StructField("tags", StringType(), True),      
+        StructField("timestamp", TimestampType(), True)
+    ])
+
+    model_version_infos = [[int(vr.version), vr.description, vr.current_stage,  vr.tags,  pd.Timestamp(vr.creation_timestamp)] for vr in model_version_infos]
+
+    model_info_df = spark.createDataFrame(pd.DataFrame(model_version_infos, columns = ['version', 'description', 'current_stage', 'tags', 'timestamp']), schema=schema)
+
+    model_info_df = (model_info_df
+          .withColumn("model_path", F.concat_ws("/", F.lit(model_name), "version"))
+          .withColumn("model_payload", pickle_model_udf("model_path"))
+          .drop("model_path")
+         )
+
+    model_info_df.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(table_name)
+
+    spark.sql(f"CREATE SHARE IF NOT EXISTS {share_name}")
+    try:
+        spark.sql(f"ALTER SHARE {share_name} ADD TABLE {table_name}")
+    except Exception:
+        pass

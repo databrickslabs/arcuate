@@ -3,16 +3,14 @@
 
 # COMMAND ----------
 
-#experiment_name = "/Users/milos.colic@databricks.com/databricks_automl/Churn_auto_ml_data-2021_10_20-08_40"
-experiment_name = "/Users/vuong.nguyen+uc@databricks.com/databricks_automl/22-01-25-16:05-automl-classification-example-4b509c14/automl-classification-example-Experiment-4b509c14"
-table_name = "vuongnguyen.default.delta_sharing_ml"
+model_name = "income-prediction-model"
 
 # COMMAND ----------
 
 from delta_sharing_mlflow import ArcuateMagic
 
 ip = get_ipython()
-print("Adding Magic to support %python %%arcuate_export")
+print("Adding Magic to support %python %%arcuate_export_model")
 ip.register_magics(ArcuateMagic)
 
 # COMMAND ----------
@@ -22,10 +20,10 @@ ip.register_magics(ArcuateMagic)
 
 # COMMAND ----------
 
-# MAGIC %%arcuate_export 
-# MAGIC create share 'ml_sharing' with table 'vuongnguyen.default.delta_sharing_ml' from experiment '/Users/vuong.nguyen+uc@databricks.com/databricks_automl/22-01-25-16:05-automl-classification-example-4b509c14/automl-classification-example-Experiment-4b509c14'
+# MAGIC %%arcuate_export_model
+# MAGIC create share 'ml_sharing' with table 'vuongnguyen.default.delta_sharing_ml_model' from model 'income-prediction-model'
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC select * from vuongnguyen.default.delta_sharing_ml
+# MAGIC SELECT * FROM vuongnguyen.default.delta_sharing_ml_model

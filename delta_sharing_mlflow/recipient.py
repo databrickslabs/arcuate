@@ -33,7 +33,7 @@ def chunks(data, SIZE=10000):
     for _ in range(0, len(data), SIZE):
         yield {k: data[k] for k in islice(it, SIZE)}
 
-def import_model(df, experiment_id):
+def import_experiment(df, experiment_id):
     for _, row in df.iterrows():
         with mlflow.start_run(experiment_id=experiment_id):
             tags = dict(row["tags"])
@@ -60,7 +60,7 @@ def import_model(df, experiment_id):
             )
             write_and_log_artifacts(dict(row["artifact_payload"]))    
         
-def import_models(df, experiment_name):
+def import_experiments(df, experiment_name):
     try:
         experiment_id = mlflow.create_experiment(experiment_name)
     except:
@@ -72,7 +72,7 @@ def import_models(df, experiment_name):
     
     with mp.Pool(parallel) as p:
         for d in dfs:
-            p.apply_async(import_model, args = (d, experiment_id))
+            p.apply_async(import_experiments, args = (d, experiment_id))
         p.close()
         p.join()   
         
