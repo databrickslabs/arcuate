@@ -2,3 +2,5 @@ cloudpickle==1.6.0
 delta-sharing==0.4.0
 sqlparse==0.4.2
 mlflow-skinny==1.23.1
+pyspark==3.2.1
+black==22.1.0

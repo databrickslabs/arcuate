@@ -13,13 +13,16 @@ import string
 import multiprocessing as mp
 import numpy as np
 
+
 def write_and_log_artifacts(artifacts):
-    random_suffix = ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
+    random_suffix = "".join(
+        random.choices(string.ascii_lowercase + string.digits, k=10)
+    )
     local_dir = f"/tmp/{random_suffix}"
     if os.path.exists(local_dir):
         shutil.rmtree(local_dir)
     os.mkdir(local_dir)
-    os.mkdir(f'{local_dir}/model')    
+    os.mkdir(f"{local_dir}/model")
     for path, content in artifacts.items():
         f = open(f"{local_dir}/{path}", "wb")
         f.write(content)
@@ -32,6 +35,7 @@ def chunks(data, SIZE=10000):
     it = iter(data)
     for _ in range(0, len(data), SIZE):
         yield {k: data[k] for k in islice(it, SIZE)}
+
 
 def import_experiment(df, experiment_id):
     for _, row in df.iterrows():
@@ -58,21 +62,21 @@ def import_experiment(df, experiment_id):
             sys.modules[model_loader].log_model(
                 model, artifact_path, signature=signature
             )
-            write_and_log_artifacts(dict(row["artifact_payload"]))    
-        
+            write_and_log_artifacts(dict(row["artifact_payload"]))
+
+
 def import_experiments(df, experiment_name):
     try:
         experiment_id = mlflow.create_experiment(experiment_name)
     except:
         client = MlflowClient()
         experiment_id = client.get_experiment_by_name(experiment_name).experiment_id
-    
+
     parallel = mp.cpu_count()
     dfs = np.array_split(df, parallel)
-    
+
     with mp.Pool(parallel) as p:
         for d in dfs:
-            p.apply_async(import_experiments, args = (d, experiment_id))
+            p.apply_async(import_experiments, args=(d, experiment_id))
         p.close()
-        p.join()   
-        
+        p.join()
