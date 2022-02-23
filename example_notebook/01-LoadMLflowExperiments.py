@@ -9,10 +9,6 @@ experiment_name = "/Users/vuong.nguyen+uc@databricks.com/databricks_automl/22-02
 
 from delta_sharing_mlflow import ArcuateMagic
 
-ip = get_ipython()
-print("Adding Magic to support %python %%arcuate_export_experiment")
-ip.register_magics(ArcuateMagic)
-
 # COMMAND ----------
 
 # MAGIC %sql

@@ -3,15 +3,7 @@
 
 # COMMAND ----------
 
-model_name = "income-prediction-model"
-
-# COMMAND ----------
-
 from delta_sharing_mlflow import ArcuateMagic
-
-ip = get_ipython()
-print("Adding Magic to support %python %%arcuate_export_model")
-ip.register_magics(ArcuateMagic)
 
 # COMMAND ----------
 
