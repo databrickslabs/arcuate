@@ -1,14 +1,20 @@
-from delta_sharing_mlflow.provider import pickle_model_udf, pickle_artifacts_udf, normalize_mlflow_df
-from delta_sharing_mlflow.recipient import load_delta_sharing_ml_model
+from delta_sharing_mlflow.provider import pickle_run_model_udf, pickle_model_udf, pickle_artifacts_udf, normalize_experiment_df, export_models, export_experiments
+from delta_sharing_mlflow.recipient import write_and_log_artifacts, chunks, import_experiments, import_experiment
 from delta_sharing_mlflow.parser import arcuate_parse
+from delta_sharing_mlflow.magic import ArcuateMagic
 from delta_sharing_mlflow.version import __version__
 
 __all__ = [
     "pickle_model_udf",
     "pickle_artifacts_udf",
     "normalize_mlflow_df",
+    "export_models",
     "load_delta_sharing_ml_model",
+    "write_and_log_artifacts",
+    "chunks",
+    "import_models",
     "arcuate_parse",
+    "ArcuateMagic",
     "__version__",
 ]
 
