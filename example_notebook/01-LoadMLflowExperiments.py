@@ -16,7 +16,7 @@ from delta_sharing_mlflow import ArcuateMagic
 
 # COMMAND ----------
 
-# MAGIC %%arcuate_export_experiment 
+# MAGIC %%arcuate_export_experiment
 # MAGIC create share 'ml_sharing' with table 'vuongnguyen.default.delta_sharing_ml_experiment' from experiment '/Users/vuong.nguyen+uc@databricks.com/databricks_automl/22-02-23-11:12-00-GenerateAutoMLModel-9b3d7e37/00-GenerateAutoMLModel-Experiment-9b3d7e37'
 
 # COMMAND ----------

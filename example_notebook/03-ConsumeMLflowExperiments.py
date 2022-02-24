@@ -8,7 +8,7 @@ from delta_sharing_mlflow import ArcuateMagic
 
 # COMMAND ----------
 
-profile_file = '/dbfs/FileStore/ml_sharing_recipient.share'
+profile_file = "/dbfs/FileStore/ml_sharing_recipient.share"
 # Create a SharingClient
 client = delta_sharing.SharingClient(profile_file)
 
@@ -24,5 +24,5 @@ table_url = f"{profile_file}#ml_sharing.default.delta_sharing_ml"
 
 # COMMAND ----------
 
-# MAGIC %%arcuate_import 
-# MAGIC create/merge/append experiment '/Users/vuong.nguyen+uc@databricks.com/my_test_experiment' as pandas '/dbfs/FileStore/ml_sharing_recipient.share#ml_sharing.default.delta_sharing_ml' 
+# MAGIC %%arcuate_import
+# MAGIC create/merge/append experiment '/Users/vuong.nguyen+uc@databricks.com/my_test_experiment' as pandas '/dbfs/FileStore/ml_sharing_recipient.share#ml_sharing.default.delta_sharing_ml'
