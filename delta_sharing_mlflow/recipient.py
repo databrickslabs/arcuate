@@ -125,6 +125,7 @@ def delete_mlflow_model(model_name: str) -> None:
     # delete existing version first
     for mv in model_versions:
         version = dict(mv)['version']
+        client.transition_model_version_stage(name=model_name, version=version, stage="Archived")
         client.delete_model_version(name=model_name, version=version)
 
     # Delete a registered model along with all its versions
