@@ -1,6 +1,6 @@
 from IPython.core.magic import Magics, magics_class, cell_magic
 from delta_sharing_mlflow.provider import export_models, export_experiments
-from delta_sharing_mlflow.recipient import import_experiments, import_models
+from delta_sharing_mlflow.recipient import import_experiments, import_models, delete_mlflow_model
 from delta_sharing_mlflow.parser import arcuate_parse
 import delta_sharing
 
@@ -44,7 +44,7 @@ class ArcuateMagic(Magics):
         inputs = " ".join(list(args)).replace("\n", " ").replace('"', "")
         ids = arcuate_parse(inputs)
 
-        (model_name, table_name) = (ids[0], ids[1])
+        (model_name, table_name) = (ids[1], ids[2])
 
         if "AS PANDAS" in inputs.upper():
             df = delta_sharing.load_as_pandas(table_name)
@@ -54,7 +54,12 @@ class ArcuateMagic(Magics):
             raise NotImplementedError(
                 "Syntax not supported. Use AS PANDAS or AS SPARK."
             )
+        
+        # delete the existing model if overwrite specified
+        if ids[-1] == "OVERWRITE":
+            delete_mlflow_model(model_name)
 
+        # import the models
         import_models(df, model_name)
 
     @cell_magic

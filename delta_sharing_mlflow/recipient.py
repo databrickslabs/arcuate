@@ -128,4 +128,7 @@ def delete_mlflow_model(model_name: str) -> None:
         client.delete_model_version(name=model_name, version=version)
 
     # Delete a registered model along with all its versions
-    client.delete_registered_model(name=model_name)
+    try:
+        client.delete_registered_model(name=model_name)
+    except Exception:
+        pass    

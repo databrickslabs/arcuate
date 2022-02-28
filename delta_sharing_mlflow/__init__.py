@@ -40,6 +40,6 @@ __all__ = [
 
 ip = get_ipython()
 print(
-    "Adding Magic to support %python %%arcuate_export_model, %%arcuate_export_experiment, %%arcuate_export_experiment, %%arcuate_import"
+    "Adding Magic to support %python %%arcuate_export_model, %%arcuate_export_experiment, %%arcuate_import_model, %%arcuate_import_experiment"
 )
 ip.register_magics(ArcuateMagic)

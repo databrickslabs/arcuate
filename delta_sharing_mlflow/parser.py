@@ -14,9 +14,15 @@ def arcuate_parse(in_query: str) -> List[str]:
         .replace(" PANDAS ", " SELECT ")
         .replace(" SPARK ", " SELECT ")
     )
+
     tokens = [
         item.value for item in sqlparse.parse(query)[0] if item.ttype != Whitespace
     ]
+
+    if "OVERWRITE" in tokens:
+        tokens.remove("OVERWRITE")
+        tokens.append("OVERWRITE")
+
     if (
         tokens[0] not in ["CREATE", "INSERT"]
         or tokens[1] not in ["SHARE", "MODE", "MODEL"]
