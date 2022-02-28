@@ -25,6 +25,10 @@ class ArcuateMagic(Magics):
                 "Syntax not supported. Use AS PANDAS or AS SPARK."
             )
 
+        # delete the existing runs in the experiment if overwrite specified
+        if "OVERWRITE" in inputs.upper():
+            delete_mlflow_model(experiment_name)
+
         import_experiments(df, experiment_name)
 
     @cell_magic

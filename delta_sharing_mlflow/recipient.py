@@ -118,6 +118,14 @@ def import_models(df: pd.DataFrame, model_name: str) -> None:
                 name=model_name, version=max_version, description=description
             )
 
+def delete_mlflow_experiment(experiment_name: str) -> None:
+    client = MlflowClient()
+    experiment =  client.get_experiment_by_name(experiment_name)
+
+    if experiment is not None:
+        for _, row in mlflow.search_runs(experiment.experiment_id).iterrows():
+            mlflow.delete_run(row["run_id"])
+
 def delete_mlflow_model(model_name: str) -> None:
     client = MlflowClient()
     model_versions = client.search_model_versions(f"name='{model_name}'")
@@ -132,4 +140,4 @@ def delete_mlflow_model(model_name: str) -> None:
     try:
         client.delete_registered_model(name=model_name)
     except Exception:
-        pass    
+        pass       
