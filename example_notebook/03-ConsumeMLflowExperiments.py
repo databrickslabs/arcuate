@@ -4,7 +4,7 @@
 # COMMAND ----------
 
 import delta_sharing
-from delta_sharing_mlflow import ArcuateMagic
+import delta_sharing_mlflow
 
 # COMMAND ----------
 
@@ -17,12 +17,15 @@ client.list_all_tables()
 
 # COMMAND ----------
 
-table_url = f"{profile_file}#ml_sharing.default.delta_sharing_ml"
-
-# Use delta sharing client to load data
-# ml_pd = delta_sharing.load_as_pandas(table_url)
+# MAGIC %%arcuate_import_experiment
+# MAGIC create experiment '/Users/vuong.nguyen+uc@databricks.com/my_test_experiment' as pandas '/dbfs/FileStore/ml_sharing_recipient.share#ml_sharing.default.delta_sharing_ml_experiment'
 
 # COMMAND ----------
 
-# MAGIC %%arcuate_import
-# MAGIC create/merge/append experiment '/Users/vuong.nguyen+uc@databricks.com/my_test_experiment' as pandas '/dbfs/FileStore/ml_sharing_recipient.share#ml_sharing.default.delta_sharing_ml'
+# MAGIC %%arcuate_import_experiment
+# MAGIC create experiment '/Users/vuong.nguyen+uc@databricks.com/my_test_experiment' as pandas '/dbfs/FileStore/ml_sharing_recipient.share#ml_sharing.default.delta_sharing_ml_experiment'
+
+# COMMAND ----------
+
+# MAGIC %%arcuate_import_experiment
+# MAGIC create experiment overwrite '/Users/vuong.nguyen+uc@databricks.com/my_test_experiment' as pandas '/dbfs/FileStore/ml_sharing_recipient.share#ml_sharing.default.delta_sharing_ml_experiment'
