@@ -1,4 +1,4 @@
-## Mini project 
+## Delta Sharing for MLFlow
 ### Model exchange via Delta Sharing
 One of the main drivers for data sharing is the knowledge contained within the data. An alternative for sharing data in highly regulated environments can be sharing of models trained on the sensitive data.
 Current options are not fit for purpose
