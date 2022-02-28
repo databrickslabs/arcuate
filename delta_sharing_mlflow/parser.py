@@ -18,8 +18,8 @@ def arcuate_parse(in_query: str) -> List[str]:
         item.value for item in sqlparse.parse(query)[0] if item.ttype != Whitespace
     ]
     if (
-        tokens[0] != "CREATE"
-        or tokens[1] not in ["SHARE", "MODE"]
+        tokens[0] not in ["CREATE", "INSERT"]
+        or tokens[1] not in ["SHARE", "MODE", "MODEL"]
         or tokens[3] not in ["AS", "WITH"]
     ):
         raise NotImplementedError("syntax not supported")
