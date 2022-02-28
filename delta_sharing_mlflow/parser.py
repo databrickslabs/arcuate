@@ -5,18 +5,26 @@ import re
 
 
 def arcuate_parse(in_query: str) -> List[str]:
+    """Parse an arcuate SQL string into list of tokens
+    Only support limited syntax, namely CREATE SHARE/MODEL name AS/WITH
+    """
     query = (
         in_query.upper()
         .replace(" EXPERIMENT ", " MODE ")
         .replace(" PANDAS ", " SELECT ")
         .replace(" SPARK ", " SELECT ")
     )
+
     tokens = [
         item.value for item in sqlparse.parse(query)[0] if item.ttype != Whitespace
     ]
+
+    if "OVERWRITE" in tokens:
+        tokens.remove("OVERWRITE")
+
     if (
-        tokens[0] != "CREATE"
-        or tokens[1] not in ["SHARE", "MODE"]
+        tokens[0] not in ["CREATE", "INSERT"]
+        or tokens[1] not in ["SHARE", "MODE", "MODEL"]
         or tokens[3] not in ["AS", "WITH"]
     ):
         raise NotImplementedError("syntax not supported")
