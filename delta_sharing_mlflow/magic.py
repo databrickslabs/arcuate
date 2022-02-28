@@ -4,6 +4,7 @@ from delta_sharing_mlflow.recipient import (
     import_experiments,
     import_models,
     delete_mlflow_model,
+    delete_mlflow_experiment,
 )
 from delta_sharing_mlflow.parser import arcuate_parse
 import delta_sharing
@@ -31,7 +32,7 @@ class ArcuateMagic(Magics):
 
         # delete the existing runs in the experiment if overwrite specified
         if "OVERWRITE" in inputs.upper():
-            delete_mlflow_model(experiment_name)
+            delete_mlflow_experiment(experiment_name)
 
         import_experiments(df, experiment_name)
 
