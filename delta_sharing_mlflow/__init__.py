@@ -13,6 +13,7 @@ from delta_sharing_mlflow.recipient import (
     import_experiment,
     import_models,
     delete_mlflow_model,
+    delete_mlflow_experiment,
 )
 from delta_sharing_mlflow.parser import arcuate_parse
 from delta_sharing_mlflow.magic import ArcuateMagic
@@ -33,6 +34,7 @@ __all__ = [
     "import_experiment",
     "import_models",
     "delete_mlflow_model",
+    "delete_mlflow_experiment",
     "arcuate_parse",
     "ArcuateMagic",
     "__version__",
