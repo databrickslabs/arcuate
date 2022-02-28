@@ -56,7 +56,7 @@ class ArcuateMagic(Magics):
             )
         
         # delete the existing model if overwrite specified
-        if ids[-1] == "OVERWRITE":
+        if "OVERWRITE" in inputs.upper():
             delete_mlflow_model(model_name)
 
         # import the models

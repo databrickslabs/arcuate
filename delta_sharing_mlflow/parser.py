@@ -21,7 +21,6 @@ def arcuate_parse(in_query: str) -> List[str]:
 
     if "OVERWRITE" in tokens:
         tokens.remove("OVERWRITE")
-        tokens.append("OVERWRITE")
 
     if (
         tokens[0] not in ["CREATE", "INSERT"]
