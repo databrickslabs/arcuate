@@ -78,7 +78,7 @@ def import_experiments(df: pd.DataFrame, experiment_name: str) -> None:
 
     with mp.Pool(parallel) as p:
         for d in dfs:
-            p.apply_async(import_experiments, args=(d, experiment_id))
+            p.apply_async(import_experiment, args=(d, experiment_id))
         p.close()
         p.join()
 
