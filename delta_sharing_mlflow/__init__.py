@@ -11,20 +11,28 @@ from delta_sharing_mlflow.recipient import (
     chunks,
     import_experiments,
     import_experiment,
+    import_models,
+    delete_mlflow_model
 )
 from delta_sharing_mlflow.parser import arcuate_parse
 from delta_sharing_mlflow.magic import ArcuateMagic
 from delta_sharing_mlflow.version import __version__
 
 __all__ = [
+    "pickle_run_model_udf",
     "pickle_model_udf",
     "pickle_artifacts_udf",
+    "normalize_experiment_df",
     "normalize_mlflow_df",
     "export_models",
+    "export_experiments",
     "load_delta_sharing_ml_model",
     "write_and_log_artifacts",
     "chunks",
+    "import_experiments",
+    "import_experiment",
     "import_models",
+    "delete_mlflow_model",
     "arcuate_parse",
     "ArcuateMagic",
     "__version__",

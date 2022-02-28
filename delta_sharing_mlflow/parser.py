@@ -5,6 +5,9 @@ import re
 
 
 def arcuate_parse(in_query: str) -> List[str]:
+    """Parse an arcuate SQL string into list of tokens
+    Only support limited syntax, namely CREATE SHARE/MODEL name AS/WITH
+    """
     query = (
         in_query.upper()
         .replace(" EXPERIMENT ", " MODE ")
