@@ -118,26 +118,30 @@ def import_models(df: pd.DataFrame, model_name: str) -> None:
                 name=model_name, version=max_version, description=description
             )
 
+
 def delete_mlflow_experiment(experiment_name: str) -> None:
     client = MlflowClient()
-    experiment =  client.get_experiment_by_name(experiment_name)
+    experiment = client.get_experiment_by_name(experiment_name)
 
     if experiment is not None:
         for _, row in mlflow.search_runs(experiment.experiment_id).iterrows():
             mlflow.delete_run(row["run_id"])
 
+
 def delete_mlflow_model(model_name: str) -> None:
     client = MlflowClient()
     model_versions = client.search_model_versions(f"name='{model_name}'")
-    
+
     # delete existing version first
     for mv in model_versions:
-        version = dict(mv)['version']
-        client.transition_model_version_stage(name=model_name, version=version, stage="Archived")
+        version = dict(mv)["version"]
+        client.transition_model_version_stage(
+            name=model_name, version=version, stage="Archived"
+        )
         client.delete_model_version(name=model_name, version=version)
 
     # Delete a registered model along with all its versions
     try:
         client.delete_registered_model(name=model_name)
     except Exception:
-        pass       
+        pass

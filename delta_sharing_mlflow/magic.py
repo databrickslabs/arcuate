@@ -1,6 +1,10 @@
 from IPython.core.magic import Magics, magics_class, cell_magic
 from delta_sharing_mlflow.provider import export_models, export_experiments
-from delta_sharing_mlflow.recipient import import_experiments, import_models, delete_mlflow_model
+from delta_sharing_mlflow.recipient import (
+    import_experiments,
+    import_models,
+    delete_mlflow_model,
+)
 from delta_sharing_mlflow.parser import arcuate_parse
 import delta_sharing
 
@@ -58,7 +62,7 @@ class ArcuateMagic(Magics):
             raise NotImplementedError(
                 "Syntax not supported. Use AS PANDAS or AS SPARK."
             )
-        
+
         # delete the existing model if overwrite specified
         if "OVERWRITE" in inputs.upper():
             delete_mlflow_model(model_name)

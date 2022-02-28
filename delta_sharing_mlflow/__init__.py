@@ -12,7 +12,7 @@ from delta_sharing_mlflow.recipient import (
     import_experiments,
     import_experiment,
     import_models,
-    delete_mlflow_model
+    delete_mlflow_model,
 )
 from delta_sharing_mlflow.parser import arcuate_parse
 from delta_sharing_mlflow.magic import ArcuateMagic
