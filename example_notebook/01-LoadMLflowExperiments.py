@@ -3,7 +3,7 @@
 
 # COMMAND ----------
 
-experiment_name = "/Users/vuong.nguyen+uc@databricks.com/databricks_automl/22-02-23-11:12-00-GenerateAutoMLModel-9b3d7e37/00-GenerateAutoMLModel-Experiment-9b3d7e37"
+experiment_name = "/Users/vuong.nguyen+uc@databricks.com/databricks_automl/22-03-10-16:40-00-GenerateAutoMLModel-d9db9fe2/00-GenerateAutoMLModel-Experiment-d9db9fe2"
 
 # COMMAND ----------
 
@@ -17,7 +17,7 @@ from delta_sharing_mlflow import ArcuateMagic
 # COMMAND ----------
 
 # MAGIC %%arcuate_export_experiment
-# MAGIC create share 'ml_sharing' with table 'vuongnguyen.default.delta_sharing_ml_experiment' from experiment '/Users/vuong.nguyen+uc@databricks.com/databricks_automl/22-02-23-11:12-00-GenerateAutoMLModel-9b3d7e37/00-GenerateAutoMLModel-Experiment-9b3d7e37'
+# MAGIC create share 'ml_sharing' with table 'vuongnguyen.default.delta_sharing_ml_experiment' from experiment '/Users/vuong.nguyen+uc@databricks.com/databricks_automl/22-03-10-16:40-00-GenerateAutoMLModel-d9db9fe2/00-GenerateAutoMLModel-Experiment-d9db9fe2'
 
 # COMMAND ----------
 

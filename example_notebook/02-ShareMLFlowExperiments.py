@@ -3,7 +3,7 @@ import urllib.request
 
 sql("""DROP RECIPIENT IF EXISTS ml_sharing_recipient""")
 df = sql("""CREATE RECIPIENT ml_sharing_recipient""")
-link = df.collect()[0][4].replace(
+link = df.collect()[0][6].replace(
     "delta_sharing/retrieve_config.html?",
     "api/2.0/unity-catalog/public/data_sharing_activation/",
 )
@@ -15,4 +15,4 @@ dbutils.fs.mv(
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC GRANT SELECT ON SHARE ml_sharing TO RECIPIENT ml_sharing_recipient
+# MAGIC GRANT SELECT ON SHARE ml_sharing to RECIPIENT ml_sharing_recipient
