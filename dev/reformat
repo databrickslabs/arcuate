@@ -1,0 +1,17 @@
+# The current directory of the script.
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+FWDIR="$( cd "$DIR"/.. && pwd )"
+cd "$FWDIR"
+
+PYTHON_EXECUTABLE="${PYTHON_EXECUTABLE:-python}"
+
+BLACK_BUILD="$PYTHON_EXECUTABLE -m black"
+BLACK_VERSION="22.1.0"
+$BLACK_BUILD -h  1>&2> /dev/null
+
+if [ $? -ne 0 ]; then
+    echo "The '$BLACK_BUILD' command was not found. Please install Black, for example, via 'pip install black==$BLACK_VERSION'."
+    exit 1
+fi
+
+$BLACK_BUILD delta_sharing_mlflow --line-length 100

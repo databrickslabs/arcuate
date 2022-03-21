@@ -1,0 +1,64 @@
+PYTHON_EXECUTABLE="${PYTHON_EXECUTABLE:-python3}"
+
+BLACK_BUILD="$PYTHON_EXECUTABLE -m black"
+
+function compile_python_test {
+    local COMPILE_STATUS=
+    local COMPILE_REPORT=
+
+    if [[ ! "$1" ]]; then
+        echo "No python files found!  Something is very wrong -- exiting."
+        exit 1;
+    fi
+
+    # compileall: https://docs.python.org/3/library/compileall.html
+    echo "starting python compilation test..."
+    COMPILE_REPORT=$( ("$PYTHON_EXECUTABLE" -B -mcompileall -q -l -x "[/\\\\][.]git" $1) 2>&1)
+    COMPILE_STATUS=$?
+
+    if [ $COMPILE_STATUS -ne 0 ]; then
+        echo "Python compilation failed with the following errors:"
+        echo "$COMPILE_REPORT"
+        echo "$COMPILE_STATUS"
+        exit "$COMPILE_STATUS"
+    else
+        echo "python compilation succeeded."
+        echo
+    fi
+}
+
+function black_test {
+    local BLACK_REPORT=
+    local BLACK_STATUS=
+
+    # Skip check if black is not installed.
+  $BLACK_BUILD -h  1>&2> /dev/null
+    if [ $? -ne 0 ]; then
+        echo "The $BLACK_BUILD command was not found. Skipping black checks for now."
+        echo
+        return
+    fi
+
+    echo "starting black test..."
+    BLACK_REPORT=$( ($BLACK_BUILD delta_sharing_mlflow --line-length 100 --check --diff) 2>&1)
+    BLACK_STATUS=$?
+
+    if [ "$BLACK_STATUS" -ne 0 ]; then
+        echo "black checks failed:"
+        echo "$BLACK_REPORT"
+        echo "Please run 'dev/reformat' script."
+        echo "$BLACK_STATUS"
+        exit "$BLACK_STATUS"
+    else
+        echo "black checks passed."
+        echo
+    fi
+}
+
+PYTHON_SOURCE="$(find . -name "*.py")"
+
+compile_python_test "$PYTHON_SOURCE"
+black_test
+
+echo
+echo "all lint-python tests passed!"
