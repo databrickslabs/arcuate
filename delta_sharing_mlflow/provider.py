@@ -48,21 +48,15 @@ def pickle_artifacts_udf(run_ids: pd.Series) -> pd.Series:
             "model/conda.yaml",
         ]
 
-        if (
-            len(artifacts) > 0
-        ):  # Because of https://github.com/mlflow/mlflow/issues/2839
-            random_suffix = "".join(
-                random.choices(string.ascii_lowercase + string.digits, k=10)
-            )
+        if len(artifacts) > 0:  # Because of https://github.com/mlflow/mlflow/issues/2839
+            random_suffix = "".join(random.choices(string.ascii_lowercase + string.digits, k=10))
             local_dir = f"/tmp/{random_suffix}/"
             if os.path.exists(local_dir):
                 shutil.rmtree(local_dir)
             os.mkdir(local_dir)
             local_path = client.download_artifacts(run_id, "", dst_path=local_dir)
             artifact_paths = [
-                os.path.join(path, file)
-                for path, _, files in os.walk(local_path)
-                for file in files
+                os.path.join(path, file) for path, _, files in os.walk(local_path) for file in files
             ]
             for path in artifact_paths:
                 if not any(ignored in path for ignored in ignored_paths):
@@ -93,17 +87,13 @@ def normalize_experiment_df(experiment_infos_df: DataFrame) -> DataFrame:
     params_subschema = [cn for cn in columns if "params." in cn]
     tags_subschema = [cn for cn in columns if "tags." in cn]
     run_info_subschema = [
-        cn
-        for cn in columns
-        if cn not in tags_subschema + params_subschema + metrics_subschema
+        cn for cn in columns if cn not in tags_subschema + params_subschema + metrics_subschema
     ]
     return (
         experiment_infos_df.select(
             F.struct(*[F.col(cn) for cn in run_info_subschema]).alias("run_info"),
             F.map_from_arrays(
-                F.array(
-                    *[F.lit(cn.replace("metrics.", "")) for cn in metrics_subschema]
-                ),
+                F.array(*[F.lit(cn.replace("metrics.", "")) for cn in metrics_subschema]),
                 F.array(*[F.col(f"`{cn}`") for cn in metrics_subschema]),
             ).alias("metrics"),
             F.map_from_arrays(
@@ -180,9 +170,7 @@ def export_models(model_name: str, table_name: str, share_name: str):
     )
 
     model_info_df = (
-        model_info_df.withColumn(
-            "model_path", F.concat_ws("/", F.lit(model_name), "version")
-        )
+        model_info_df.withColumn("model_path", F.concat_ws("/", F.lit(model_name), "version"))
         .withColumn("model_payload", pickle_model_udf("model_path"))
         .drop("model_path")
     )

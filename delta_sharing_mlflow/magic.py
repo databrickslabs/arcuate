@@ -26,9 +26,7 @@ class ArcuateMagic(Magics):
         elif "AS SPARK" in inputs.upper():
             df = globals()[table_name]
         else:
-            raise NotImplementedError(
-                "Syntax not supported. Use AS PANDAS or AS SPARK."
-            )
+            raise NotImplementedError("Syntax not supported. Use AS PANDAS or AS SPARK.")
 
         # delete the existing runs in the experiment if overwrite specified
         if "OVERWRITE" in inputs.upper():
@@ -60,9 +58,7 @@ class ArcuateMagic(Magics):
         elif "AS SPARK" in inputs.upper():
             df = globals()[table_name]
         else:
-            raise NotImplementedError(
-                "Syntax not supported. Use AS PANDAS or AS SPARK."
-            )
+            raise NotImplementedError("Syntax not supported. Use AS PANDAS or AS SPARK.")
 
         # delete the existing model if overwrite specified
         if "OVERWRITE" in inputs.upper():

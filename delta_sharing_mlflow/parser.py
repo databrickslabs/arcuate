@@ -15,9 +15,7 @@ def arcuate_parse(in_query: str) -> List[str]:
         .replace(" SPARK ", " SELECT ")
     )
 
-    tokens = [
-        item.value for item in sqlparse.parse(query)[0] if item.ttype != Whitespace
-    ]
+    tokens = [item.value for item in sqlparse.parse(query)[0] if item.ttype != Whitespace]
 
     if "OVERWRITE" in tokens:
         tokens.remove("OVERWRITE")
@@ -40,10 +38,7 @@ def arcuate_parse(in_query: str) -> List[str]:
     ids = [
         item.value.replace("'", "")
         for item in tokens
-        if (
-            str(item.ttype) == "Token.Literal.String.Single"
-            or str(item.ttype) == "None"
-        )
+        if (str(item.ttype) == "Token.Literal.String.Single" or str(item.ttype) == "None")
         and item.value.upper() != "AS"
     ]
 

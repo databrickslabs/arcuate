@@ -16,9 +16,7 @@ import pandas as pd
 
 
 def write_and_log_artifacts(artifacts: dict) -> None:
-    random_suffix = "".join(
-        random.choices(string.ascii_lowercase + string.digits, k=10)
-    )
+    random_suffix = "".join(random.choices(string.ascii_lowercase + string.digits, k=10))
     local_dir = f"/tmp/{random_suffix}"
     if os.path.exists(local_dir):
         shutil.rmtree(local_dir)
@@ -45,9 +43,7 @@ def import_experiment(df: pd.DataFrame, experiment_id: str) -> None:
             mlflow_log_model_history = json.loads(tags["mlflow.log-model.history"])[
                 -1
             ]  # I dont think we know which is the latest
-            model_loader = mlflow_log_model_history["flavors"]["python_function"][
-                "loader_module"
-            ]
+            model_loader = mlflow_log_model_history["flavors"]["python_function"]["loader_module"]
             artifact_path = mlflow_log_model_history["artifact_path"]
             signature = ModelSignature.from_dict(mlflow_log_model_history["signature"])
             tags.pop("mlflow.log-model.history", None)
@@ -60,9 +56,7 @@ def import_experiment(df: pd.DataFrame, experiment_id: str) -> None:
                 mlflow.log_params(chunk)
             model_payload = row["model_payload"]
             model = cloudpickle.loads(model_payload)
-            sys.modules[model_loader].log_model(
-                model, artifact_path, signature=signature
-            )
+            sys.modules[model_loader].log_model(model, artifact_path, signature=signature)
             write_and_log_artifacts(dict(row["artifact_payload"]))
 
 
@@ -101,8 +95,7 @@ def import_models(df: pd.DataFrame, model_name: str) -> None:
         )
         # get the latest version
         versions = [
-            int(dict(mv)["version"])
-            for mv in client.search_model_versions(f"name='{model_name}'")
+            int(dict(mv)["version"]) for mv in client.search_model_versions(f"name='{model_name}'")
         ]
         max_version = max(versions)
 
@@ -135,9 +128,7 @@ def delete_mlflow_model(model_name: str) -> None:
     # delete existing version first
     for mv in model_versions:
         version = dict(mv)["version"]
-        client.transition_model_version_stage(
-            name=model_name, version=version, stage="Archived"
-        )
+        client.transition_model_version_stage(name=model_name, version=version, stage="Archived")
         client.delete_model_version(name=model_name, version=version)
 
     # Delete a registered model along with all its versions
