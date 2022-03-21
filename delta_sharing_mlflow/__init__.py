@@ -16,7 +16,6 @@ from delta_sharing_mlflow.recipient import (
     delete_mlflow_experiment,
 )
 from delta_sharing_mlflow.parser import arcuate_parse
-from delta_sharing_mlflow.magic import ArcuateMagic
 from delta_sharing_mlflow.version import __version__
 
 __all__ = [
@@ -40,8 +39,13 @@ __all__ = [
     "__version__",
 ]
 
-ip = get_ipython()
-print(
-    "Adding Magic to support %python %%arcuate_export_model, %%arcuate_export_experiment, %%arcuate_import_model, %%arcuate_import_experiment"
-)
-ip.register_magics(ArcuateMagic)
+## only import IPython magic if IPython exists
+try:
+    from delta_sharing_mlflow.magic import ArcuateMagic
+    ip = get_ipython()
+    print(
+        "Adding Magic to support %python %%arcuate_export_model, %%arcuate_export_experiment, %%arcuate_import_model, %%arcuate_import_experiment"
+    )
+    ip.register_magics(ArcuateMagic)
+except Exception:
+    pass
