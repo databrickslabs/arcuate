@@ -10,17 +10,17 @@ with open(path.join(this_directory, "README.md"), encoding="utf-8") as f:
     LONG_DESCRIPTION = f.read()
 
 try:
-    exec(open("delta_sharing_mlflow/version.py").read())
+    exec(open("arcuate/version.py").read())
 except IOError:
     print("Failed to load version file for packaging.", file=sys.stderr)
     sys.exit(-1)
 VERSION = __version__
 
 setup(
-    name="delta-sharing-mlflow",
+    name="arcuate",
     version=VERSION,
     packages=[
-        "delta_sharing_mlflow",
+        "arcuate",
     ],
     python_requires=">=3.6",
     install_requires=[

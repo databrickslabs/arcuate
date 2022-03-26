@@ -7,7 +7,7 @@ experiment_name = "/Users/vuong.nguyen+uc@databricks.com/databricks_automl/22-03
 
 # COMMAND ----------
 
-from delta_sharing_mlflow import ArcuateMagic
+from arcuate import ArcuateMagic
 
 # COMMAND ----------
 

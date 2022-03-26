@@ -3,7 +3,7 @@
 
 # COMMAND ----------
 
-from delta_sharing_mlflow import ArcuateMagic
+from arcuate import ArcuateMagic
 
 # COMMAND ----------
 

@@ -1,0 +1,4 @@
+pytest==7.1.1
+pyspark==3.2.1
+pytest-mock==3.7.0
+IPython==8.1.1

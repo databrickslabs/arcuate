@@ -1,6 +1,5 @@
 cloudpickle==1.6.0
 delta-sharing==0.4.0
 sqlparse==0.4.2
-mlflow-skinny==1.23.1
+mlflow==1.24.0
 black==22.1.0
-pytest==7.1.1

@@ -1,0 +1,1 @@
+coverage run --source=arcuate -m pytest -v tests && coverage report -m

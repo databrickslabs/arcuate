@@ -4,7 +4,7 @@
 # COMMAND ----------
 
 import delta_sharing
-import delta_sharing_mlflow
+import arcuate
 
 # COMMAND ----------
 
