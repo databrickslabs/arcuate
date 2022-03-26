@@ -35,10 +35,11 @@ def test_invalid_arcuate_import_experiment(mocker: MockerFixture):
         magic = TestArcuateMagic(mocker)
         magic.arcuate_import_experiment(
             "CREATE",
-            "MODEL",
-            "AS" "EXPERIMENT",
+            "EXPERIMENT",
             "OVERWRITE",
             "experiment_name",
+            "AS",
+            "SPARK",
             "delta_sharing_coordinate",
         )
 
@@ -70,10 +71,10 @@ def test_invalid_arcuate_import_model(mocker: MockerFixture):
         magic.arcuate_import_model(
             "CREATE",
             "MODEL",
-            "AS",
-            "EXPERIMENT",
             "OVERWRITE",
-            "experiment_name",
+            "model",
+            "AS",
+            "SPARK",
             "delta_sharing_coordinate",
         )
 
