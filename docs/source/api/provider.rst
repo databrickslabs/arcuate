@@ -20,7 +20,7 @@ export_experiment
     :example:
 
 .. tabs::
-   .. tab:: arcuate-magic
+   .. tab:: arcuate_magic
 
     >>> ``%%arcuate_export_experiment``
         CREATE SHARE share_name WITH TABLE table_name FROM EXPERIMENT experiment_name
@@ -53,7 +53,7 @@ export_model
     :example:
 
 .. tabs::
-   .. tab:: arcuate-magic
+   .. tab:: arcuate_magic
 
     >>> ``%%arcuate_export_model``
         CREATE SHARE share_name WITH TABLE table_name FROM MODEL model_name
