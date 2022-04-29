@@ -1,0 +1,43 @@
+name: Build arcuate project
+on:
+  push:
+    branches:
+      - main
+      - release
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  python:
+    strategy:
+      matrix:
+        python-version: [ "3.8", "3.9"]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      # Setup Python (faster than using Python container)
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install build wheel
+          pip install -e .
+
+      - name: Test and build python package
+        run: python -m build
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: artefacts-${{ matrix.python-version }}
+          path: dist/*.whl
