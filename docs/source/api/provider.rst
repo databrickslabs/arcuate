@@ -22,7 +22,7 @@ export_experiment
 .. tabs::
    .. code-tab:: arcuate-magic
 
-    >>> %%arcuate_export_experiment
+    >>> ``%%arcuate_export_experiment``
         CREATE SHARE share_name WITH TABLE table_name FROM EXPERIMENT experiment_name
 
    .. code-tab:: python
@@ -55,7 +55,7 @@ export_model
 .. tabs::
    .. code-tab:: arcuate-magic
 
-    >>> %%arcuate_export_model
+    >>> ``%%arcuate_export_model``
         CREATE SHARE share_name WITH TABLE table_name FROM MODEL model_name
 
    .. code-tab:: python
