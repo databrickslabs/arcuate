@@ -1,9 +1,9 @@
-==================
-Recipient
-==================
+================================
+ML Model & Experiment Recipient
+================================
 
 import_experiment
-***********
+*****************
 
 .. function:: import_experiment
 

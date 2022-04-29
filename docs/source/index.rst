@@ -5,7 +5,7 @@
 
 .. image:: images/model_exchange.png
    :width: 50%
-   :alt: mosaic
+   :alt: arcuate
    :align: left
 
 Arcuate is an extension to Delta Sharing that allows exchange of ML models over the Delta Sharing protocol.

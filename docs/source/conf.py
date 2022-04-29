@@ -12,8 +12,8 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../python'))
-
+sys.path.insert(0, os.path.abspath('../..'))
+sys.path.append(os.path.abspath("./_ext"))
 
 # -- Project information -----------------------------------------------------
 
@@ -36,7 +36,8 @@ extensions = [
     "sphinx_tabs.tabs",
     "sphinx.ext.githubpages",
     "sphinx.ext.autosectionlabel",
-    "sphinx.ext.todo"
+    "sphinx.ext.todo",
+    'arcuate-magic',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -85,14 +86,13 @@ html_theme_options = {
     'globaltoc_collapse': True,
     'globaltoc_includehidden': True,    
     'heroes': {'index': 'Simple way to share ml models on Databricks'
-                                 'Mosaic'},
+                                 'Arcuate'},
     "version_dropdown": True,
     # "version_json": "../versions-v2.json",
 
 }
 html_title = project
 html_short_title = project
-html_logo = 'images/mosaic_logo.svg'
 html_sidebars = {
     "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
 }
