@@ -15,7 +15,7 @@ jobs:
         python-version: [ "3.8", "3.9"]
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Configure python interpreter
       uses: actions/setup-python@v3
       with:
@@ -34,7 +34,7 @@ jobs:
         python -m build
     - name: Copy python artifacts to GH Actions run
       run: cp dist/*.whl staging
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: artefacts
         path: staging
