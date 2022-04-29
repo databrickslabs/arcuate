@@ -7,7 +7,7 @@ import_experiment
 
 .. function:: import_experiment
 
-    Create a delta sharing share containing all the models from an experiment.
+    Create an MLflow experiment containing all the runs from a share
 
     :param delta_sharing_coordinate: 3 piece coordinates identifying the share.
     :type delta_sharing_coordinate: String
@@ -18,14 +18,14 @@ import_experiment
     :example:
 
 .. tabs::
-   .. code-tab:: python arcuate_magic
+   .. code-tab:: arcuate_magic Arcuate Magic
 
-    >>> ``%%arcuate_import_experiment``
+        %%arcuate_import_experiment
         CREATE EXPERIMENT [OVERWRITE] experiment_name AS [PANDAS/SPARK] delta_sharing_coordinate
 
    .. code-tab:: python
 
-    >>> import arcuate
+        import arcuate
         import delta_sharing
 
         df = delta_sharing.load_as_pandas(delta_sharing_coordinate)
@@ -36,12 +36,12 @@ import_experiment
 
 .. note:: This function doesnt have any real return type. It is either a success or it will throw an error.
 
-export_model
+import_model
 ************
 
-.. function:: export_experiment
+.. function:: import_model Arcuate Magic
 
-    Create a delta sharing share containing the requested model.
+    Create an MLflow model in the registry containing all the models from a share
 
     :param delta_sharing_coordinate: 3 piece coordinates identifying the share.
     :type delta_sharing_coordinate: String
@@ -52,14 +52,14 @@ export_model
     :example:
 
 .. tabs::
-   .. code-tab:: python arcuate_magic
+   .. code-tab:: arcuate_magic
 
-    >>> ``%%arcuate_import_model``
+       %%arcuate_import_model
         CREATE MODEL [OVERWRITE] model_name AS [PANDAS/SPARK] delta_sharing_coordinate
 
    .. code-tab:: python
 
-    >>> import arcuate
+        import arcuate
         import delta_sharing
 
         df = delta_sharing.load_as_pandas(delta_sharing_coordinate)

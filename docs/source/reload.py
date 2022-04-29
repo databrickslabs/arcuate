@@ -7,6 +7,5 @@ if __name__ == '__main__':
     server.watch('*.py', shell('make -C .. html'), delay=1)
     server.watch('api/*', shell('make -C .. html'), delay=1)
     server.watch('images/*', shell('make -C .. html'), delay=1)
-    server.watch('_static/*', shell('make -C .. html'), delay=1)
     server.watch('_templates/*', shell('make -C .. html'), delay=1)
     server.serve(root='../_build/html')

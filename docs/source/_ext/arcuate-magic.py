@@ -1,12 +1,11 @@
 # add custom lexer for arcuate-magic
 from pygments.lexers.sql import SqlLexer
 from pygments.token import Name, Keyword
-from sphinx.highlighting import lexers
 
 class ArcuateLexer(SqlLexer):
-    name = 'arcuate-magic'
+    name = 'Arcuate Magic'
 
-    EXTRA_KEYWORDS = ['EXPERIMENT', 'MODEL', 'PANDAS', 'SPARK']
+    EXTRA_KEYWORDS = ['EXPERIMENT', 'MODEL', 'PANDAS', 'SPARK', 'OVERWRITE']
 
     def get_tokens_unprocessed(self, text):
         for index, token, value in SqlLexer.get_tokens_unprocessed(self, text):
@@ -16,4 +15,4 @@ class ArcuateLexer(SqlLexer):
                 yield index, token, value
 
 def setup(app):
-    app.add_lexer('arcuate-magic', ArcuateLexer)
+    app.add_lexer('arcuate_magic', ArcuateLexer)
