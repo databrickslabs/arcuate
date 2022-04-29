@@ -5,6 +5,7 @@ ___
 
 [![DBR](https://img.shields.io/badge/DBR-10.4_ML-green)]()
 [![PyTest](https://github.com/databricks/arcuate/actions/workflows/pytest.yml/badge.svg?branch=main)](https://github.com/databricks/arcuate/actions/workflows/pytest.yml)
+[![Build arcuate project](https://github.com/databricks/arcuate/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/databricks/arcuate/actions/workflows/build.yml)
 
 ## Model exchange via Delta Sharing
 
@@ -78,11 +79,6 @@ pip install arcuate
     import_models(df, model_name)
     ```
 
-## Building a wheel file
-
-```shell
-python setup.py bdist_wheel --universal
-```
 ## Project support
 Please note that all projects in the /databrickslabs github account are provided for your exploration only, and are not formally supported by Databricks with Service Level Agreements (SLAs). They are provided AS-IS and we do not make any guarantees of any kind. Please do not submit a support ticket relating to any issues arising from the use of these projects.
 
