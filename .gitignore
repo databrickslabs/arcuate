@@ -153,3 +153,7 @@ cython_debug/
 
 # VScode
 .vscode/
+
+#IntelliJ
+*.iml
+.idea
