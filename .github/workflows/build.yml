@@ -39,5 +39,5 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: artefacts
+          name: artefacts-${{ matrix.python-version }}
           path: dist/*.whl
