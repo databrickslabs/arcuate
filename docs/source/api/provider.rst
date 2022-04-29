@@ -20,7 +20,7 @@ export_experiment
     :example:
 
 .. tabs::
-   .. code-tab:: python
+   .. tab:: arcuate-magic
 
     >>> ``%%arcuate_export_experiment``
         CREATE SHARE share_name WITH TABLE table_name FROM EXPERIMENT experiment_name
