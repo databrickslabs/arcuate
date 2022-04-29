@@ -33,7 +33,7 @@ jobs:
         python -m pytest --import-mode=append tests/
         python -m build
     - name: Copy python artifacts to GH Actions run
-      run: cp python/dist/*.whl staging
+      run: cp dist/*.whl staging
     - uses: actions/upload-artifact@v2
       with:
         name: artefacts
