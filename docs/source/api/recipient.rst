@@ -52,7 +52,7 @@ export_model
     :example:
 
 .. tabs::
-   .. code-tab:: arcuate-magic
+   .. tab:: arcuate-magic
 
     >>> ``%%arcuate_import_model``
         CREATE MODEL [OVERWRITE] model_name AS [PANDAS/SPARK] delta_sharing_coordinate

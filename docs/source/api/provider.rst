@@ -53,7 +53,7 @@ export_model
     :example:
 
 .. tabs::
-   .. code-tab:: arcuate-magic
+   .. tab:: arcuate-magic
 
     >>> ``%%arcuate_export_model``
         CREATE SHARE share_name WITH TABLE table_name FROM MODEL model_name
