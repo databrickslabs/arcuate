@@ -33,11 +33,11 @@ jobs:
           pip install -r requirements.txt
           pip install build wheel
           pip install -e .
+
       - name: Test and build python package
         run: python -m build
-      - name: Copy python artifacts to GH Actions run
-        run: cp dist/*.whl staging
+
       - uses: actions/upload-artifact@v3
         with:
           name: artefacts
-          path: staging
+          path: dist/*.whl
