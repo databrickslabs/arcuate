@@ -18,7 +18,7 @@ import_experiment
     :example:
 
 .. tabs::
-   .. code-tab:: arcuate-magic
+   .. code-tab:: python
 
     >>> ``%%arcuate_import_experiment``
         CREATE EXPERIMENT [OVERWRITE] experiment_name AS [PANDAS/SPARK] delta_sharing_coordinate
