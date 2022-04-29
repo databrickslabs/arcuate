@@ -1,0 +1,38 @@
+name: Build arcuate project
+on:
+  push:
+    branches:
+      - main
+      - release
+  pull_request:
+    branches:
+      - '**'
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        python-version: [ "3.8", "3.9"]
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Configure python interpreter
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python }}
+    - name: Install python dependencies
+      run: |
+        cd python
+        pip install build wheel
+        pip install .
+    - name: Test and build python package
+      run: |
+        cd python 
+        python -m unittest
+        python -m build
+    - name: Copy python artifacts to GH Actions run
+      run: cp python/dist/*.whl staging
+    - uses: actions/upload-artifact@v2
+      with:
+        name: artefacts
+        path: staging
