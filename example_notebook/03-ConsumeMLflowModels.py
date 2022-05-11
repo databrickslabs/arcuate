@@ -17,15 +17,15 @@ client.list_all_tables()
 
 # COMMAND ----------
 
-# MAGIC %%arcuate_import_model
+# MAGIC %%arcuate
 # MAGIC create model 'delta-sharing-model' as pandas '/dbfs/FileStore/ml_sharing_recipient.share#ml_sharing.default.delta_sharing_ml_model'
 
 # COMMAND ----------
 
-# MAGIC %%arcuate_import_model
+# MAGIC %%arcuate
 # MAGIC create model 'delta-sharing-model' as pandas '/dbfs/FileStore/ml_sharing_recipient.share#ml_sharing.default.delta_sharing_ml_model'
 
 # COMMAND ----------
 
-# MAGIC %%arcuate_import_model
-# MAGIC create model overwrite 'delta-sharing-model' as pandas '/dbfs/FileStore/ml_sharing_recipient.share#ml_sharing.default.delta_sharing_ml_model'
+# MAGIC %%arcuate
+# MAGIC create or replace model 'delta-sharing-model' as pandas '/dbfs/FileStore/ml_sharing_recipient.share#ml_sharing.default.delta_sharing_ml_model'
