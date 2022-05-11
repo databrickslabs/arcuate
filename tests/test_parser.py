@@ -24,18 +24,22 @@ def test_parse_import_experiment():
 
 def test_parse_import_experiment_overwrite():
     tokens = arcuate_parse(
-        "create experiment overwrite 'experiment_id' as pandas 'delta_share#coordinate'"
+        "create or replace experiment 'experiment_id' as pandas 'delta_share#coordinate'"
     )
     assert tokens == ["experiment_id", "delta_share#coordinate"]
 
 
 def test_parse_import_model():
-    tokens = arcuate_parse("create model overwrite 'ml_sharing' as pandas 'delta_share#coordinate'")
+    tokens = arcuate_parse(
+        "create or replace model 'ml_sharing' as pandas 'delta_share#coordinate'"
+    )
     assert tokens == ["model", "ml_sharing", "delta_share#coordinate"]
 
 
 def test_parse_import_model_overwrite():
-    tokens = arcuate_parse("create model overwrite 'ml_sharing' as pandas 'delta_share#coordinate'")
+    tokens = arcuate_parse(
+        "create or replace model 'ml_sharing' as pandas 'delta_share#coordinate'"
+    )
     assert tokens == ["model", "ml_sharing", "delta_share#coordinate"]
 
 

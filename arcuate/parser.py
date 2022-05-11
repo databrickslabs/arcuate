@@ -17,14 +17,11 @@ def arcuate_parse(in_query: str) -> List[str]:
 
     tokens = [item.value for item in sqlparse.parse(query)[0] if item.ttype != Whitespace]
 
-    if "OVERWRITE" in tokens:
-        tokens.remove("OVERWRITE")
-
     if len(tokens) < 5:
         raise NotImplementedError("syntax not supported")
 
     if (
-        tokens[0] not in ["CREATE", "INSERT"]
+        tokens[0] not in ["CREATE", "CREATE OR REPLACE"]
         or tokens[1] not in ["SHARE", "MODE", "MODEL"]
         or tokens[3] not in ["AS", "WITH"]
     ):
