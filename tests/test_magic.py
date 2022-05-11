@@ -16,10 +16,11 @@ def test_arcuate_import_experiment(mocker: MockerFixture):
     mocked_delete = mocker.patch("arcuate.magic.delete_mlflow_experiment")
     mocked_import = mocker.patch("arcuate.magic.import_experiments")
 
-    magic.arcuate_import_experiment(
+    magic.arcuate(
         "CREATE",
+        "OR",
+        "REPLACE",
         "EXPERIMENT",
-        "OVERWRITE",
         "experiment_name",
         "AS",
         "PANDAS",
@@ -33,10 +34,11 @@ def test_arcuate_import_experiment(mocker: MockerFixture):
 def test_invalid_arcuate_import_experiment(mocker: MockerFixture):
     with pytest.raises(NotImplementedError):
         magic = TestArcuateMagic(mocker)
-        magic.arcuate_import_experiment(
+        magic.arcuate(
             "CREATE",
+            "OR",
+            "REPLACE",
             "EXPERIMENT",
-            "OVERWRITE",
             "experiment_name",
             "AS",
             "SPARK",
@@ -51,10 +53,11 @@ def test_arcuate_import_model(mocker: MockerFixture):
     mocked_delete = mocker.patch("arcuate.magic.delete_mlflow_model")
     mocked_import = mocker.patch("arcuate.magic.import_models")
 
-    magic.arcuate_import_model(
+    magic.arcuate(
         "CREATE",
+        "OR",
+        "REPLACE",
         "MODEL",
-        "OVERWRITE",
         "model",
         "AS",
         "PANDAS",
@@ -68,7 +71,7 @@ def test_arcuate_import_model(mocker: MockerFixture):
 def test_invalid_arcuate_import_model(mocker: MockerFixture):
     with pytest.raises(NotImplementedError):
         magic = TestArcuateMagic(mocker)
-        magic.arcuate_import_model(
+        magic.arcuate(
             "CREATE",
             "MODEL",
             "OVERWRITE",
@@ -84,7 +87,7 @@ def test_arcuate_export_experiment(mocker: MockerFixture):
 
     mocked_export = mocker.patch("arcuate.magic.export_experiments")
 
-    magic.arcuate_export_experiment(
+    magic.arcuate(
         "CREATE",
         "SHARE",
         "'share_name'",
@@ -104,7 +107,7 @@ def test_arcuate_export_model(mocker: MockerFixture):
 
     mocked_export = mocker.patch("arcuate.magic.export_models")
 
-    magic.arcuate_export_model(
+    magic.arcuate(
         "CREATE",
         "SHARE",
         "'share_name'",
