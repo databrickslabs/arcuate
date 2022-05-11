@@ -38,7 +38,7 @@ class ArcuateMagic(Magics):
             raise NotImplementedError("Syntax not supported. Use AS PANDAS")
 
         # delete the existing runs in the experiment if overwrite specified
-        if "OVERWRITE" in inputs.upper():
+        if "OR REPLACE" in inputs.upper():
             delete_mlflow_experiment(self.client, experiment_name)
 
         import_experiments(self.client, df, experiment_name)
@@ -70,7 +70,7 @@ class ArcuateMagic(Magics):
             raise NotImplementedError("Syntax not supported. Use AS PANDAS")
 
         # delete the existing model if overwrite specified
-        if "OVERWRITE" in inputs.upper():
+        if "OR REPLACE" in inputs.upper():
             delete_mlflow_model(self.client, model_name)
 
         # import the models
