@@ -20,8 +20,8 @@ import_experiment
 .. tabs::
    .. code-tab:: arcuate_magic Arcuate Magic
 
-        %%arcuate_import_experiment
-        CREATE EXPERIMENT [OVERWRITE] experiment_name AS [PANDAS/SPARK] delta_sharing_coordinate
+        %%arcuate
+        CREATE [OR REPLACE] EXPERIMENT experiment_name AS [PANDAS/SPARK] delta_sharing_coordinate
 
    .. code-tab:: python
 
@@ -54,8 +54,8 @@ import_model
 .. tabs::
    .. code-tab:: arcuate_magic
 
-       %%arcuate_import_model
-        CREATE MODEL [OVERWRITE] model_name AS [PANDAS/SPARK] delta_sharing_coordinate
+       %%arcuate
+        CREATE [OR REPLACE] MODEL model_name AS [PANDAS/SPARK] delta_sharing_coordinate
 
    .. code-tab:: python
 

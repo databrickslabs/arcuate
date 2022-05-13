@@ -44,9 +44,7 @@ try:
     from arcuate.magic import ArcuateMagic
 
     ip = get_ipython()
-    print(
-        "Adding Magic to support %python %%arcuate_export_model, %%arcuate_export_experiment, %%arcuate_import_model, %%arcuate_import_experiment"
-    )
+    print("Adding Magic to support %python %%arcuate")
     ip.register_magics(ArcuateMagic)
 except Exception:
     pass

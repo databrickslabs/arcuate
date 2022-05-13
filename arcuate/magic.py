@@ -22,66 +22,57 @@ class ArcuateMagic(Magics):
         self.spark = SparkSession.builder.getOrCreate()
 
     @cell_magic
-    def arcuate_import_experiment(self, *args):
+    def arcuate(self, *args):
         """Import ML runs into an experiment"""
 
         inputs = " ".join(list(args)).replace("\n", " ").replace('"', "")
         ids = arcuate_parse(inputs)
 
-        (experiment_name, table_name) = (ids[0], ids[1])
+        # provider actions
+        if ids[1].upper() == "SHARE":
 
-        if "AS PANDAS" in inputs.upper():
-            df = delta_sharing.load_as_pandas(table_name)
-        # elif "AS SPARK" in inputs.upper():
-        # df = globals()[table_name]
+            (share_name, table_name, object_name) = (ids[2], ids[3], ids[5])
+
+            # export model
+            if ids[4].upper() == "MODE":
+                model_name = object_name
+                export_models(self.client, self.spark, model_name, table_name, share_name)
+            # export experiment
+            elif ids[4].upper() == "EXPLAIN":
+                experiment_name = object_name
+                export_experiments(self.client, self.spark, experiment_name, table_name, share_name)
+
+        # recipient actions
         else:
-            raise NotImplementedError("Syntax not supported. Use AS PANDAS")
 
-        # delete the existing runs in the experiment if overwrite specified
-        if "OVERWRITE" in inputs.upper():
-            delete_mlflow_experiment(self.client, experiment_name)
+            (action, object_name, table_name) = (ids[0], ids[2], ids[3])
 
-        import_experiments(self.client, df, experiment_name)
+            if "AS PANDAS" in inputs.upper():
+                df = delta_sharing.load_as_pandas(table_name)
+            # elif "AS SPARK" in inputs.upper():
+            # TO BE IMPLEMENTED
+            else:
+                raise NotImplementedError("Syntax not supported. Use AS PANDAS")
 
-    @cell_magic
-    def arcuate_export_experiment(self, *args):
-        """Export ML runs from an experiment into a Delta Sharing table"""
+            # import model
+            if ids[1] == "MODE":
+                model_name = object_name
 
-        inputs = " ".join(list(args)).replace("\n", " ").replace('"', "")
-        ids = arcuate_parse(inputs)
+                # delete the existing model if overwrite specified
+                if action.upper() == "CREATE OR REPLACE":
+                    delete_mlflow_model(self.client, model_name)
 
-        (share_name, table_name, experiment_name) = (ids[0], ids[1], ids[2])
-        export_experiments(self.client, self.spark, experiment_name, table_name, share_name)
+                # import the models
+                import_models(self.client, df, model_name)
 
-    @cell_magic
-    def arcuate_import_model(self, *args):
-        """Import ML models from Delta Sharing table into MLFlow registry"""
+            # import experiment
+            elif ids[1] == "EXPLAIN":
 
-        inputs = " ".join(list(args)).replace("\n", " ").replace('"', "")
-        ids = arcuate_parse(inputs)
+                experiment_name = object_name
 
-        (model_name, table_name) = (ids[1], ids[2])
+                # delete the existing runs in the experiment if overwrite specified
+                if action.upper() == "CREATE OR REPLACE":
+                    delete_mlflow_experiment(self.client, experiment_name)
 
-        if "AS PANDAS" in inputs.upper():
-            df = delta_sharing.load_as_pandas(table_name)
-        # elif "AS SPARK" in inputs.upper():
-        # df = globals()[table_name]
-        else:
-            raise NotImplementedError("Syntax not supported. Use AS PANDAS")
-
-        # delete the existing model if overwrite specified
-        if "OVERWRITE" in inputs.upper():
-            delete_mlflow_model(self.client, model_name)
-
-        # import the models
-        import_models(self.client, df, model_name)
-
-    @cell_magic
-    def arcuate_export_model(self, *args):
-        """Export ML models into a Delta Sharing table"""
-
-        inputs = " ".join(list(args)).replace("\n", " ").replace('"', "")
-        ids = arcuate_parse(inputs)
-
-        (share_name, table_name, model_name) = (ids[0], ids[1], ids[3])
-        export_models(self.client, self.spark, model_name, table_name, share_name)
+                # import the experiments
+                import_experiments(self.client, df, experiment_name)

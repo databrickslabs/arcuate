@@ -32,23 +32,23 @@ pip install arcuate
 - Train model in Databricks (or elsewhere), store it in MLflow
 - Export MLflow experiments & models to a Delta table and add it to a share, using IPython magic 
     ```python
-    %%arcuate_export_experiment  
+    %%arcuate
     CREATE SHARE share_name WITH TABLE table_name FROM EXPERIMENT experiment_name
     ```
 
     ```python
-    %%arcuate_export_model
+    %%arcuate
     CREATE SHARE share_name WITH TABLE table_name FROM MODEL model_name
     ```
 - Recipient of this shared table can load it into MLflow seamlessly, using IPython magic:
     ```python
-    %%arcuate_import_experiment
-    CREATE EXPERIMENT [OVERWRITE] experiment_name AS [PANDAS/SPARK] delta_sharing_coordinate
+    %%arcuate
+    CREATE [OR REPLACE] EXPERIMENT experiment_name AS [PANDAS/SPARK] delta_sharing_coordinate
     ```
 
     ```python
-    %%arcuate_import_model
-    CREATE MODEL [OVERWRITE] model_name AS [PANDAS/SPARK] delta_sharing_coordinate
+    %%arcuate
+    CREATE [OR REPLACE] MODEL model_name AS [PANDAS/SPARK] delta_sharing_coordinate
     ```
 
 - Users who prefer Python API instead of IPython magic can leverage these API calls:

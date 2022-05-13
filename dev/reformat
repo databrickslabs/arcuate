@@ -6,7 +6,7 @@ cd "$FWDIR"
 PYTHON_EXECUTABLE="${PYTHON_EXECUTABLE:-python}"
 
 BLACK_BUILD="$PYTHON_EXECUTABLE -m black"
-BLACK_VERSION="22.1.0"
+BLACK_VERSION="22.3.0"
 $BLACK_BUILD -h  1>&2> /dev/null
 
 if [ $? -ne 0 ]; then
