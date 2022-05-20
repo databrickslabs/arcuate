@@ -23,61 +23,35 @@ The project name takes inspiration from arcuate delta - the wide fan-shaped rive
 
 ## How to use:
 
-Install the library
-
-```python
-pip install arcuate
-```
+- Install the library
+  ```python
+  pip install arcuate
+  ```
 
 - Train model in Databricks (or elsewhere), store it in MLflow
-- Export MLflow experiments & models to a Delta table and add it to a share, using IPython magic 
-    ```python
-    %%arcuate_export_experiment  
-    CREATE SHARE share_name WITH TABLE table_name FROM EXPERIMENT experiment_name
-    ```
+- Export MLflow experiments & models to a Delta table and add it to a share, using Python APIs
+  ```python
+  import arcuate
 
-    ```python
-    %%arcuate_export_model
-    CREATE SHARE share_name WITH TABLE table_name FROM MODEL model_name
-    ```
-- Recipient of this shared table can load it into MLflow seamlessly, using IPython magic:
-    ```python
-    %%arcuate_import_experiment
-    CREATE EXPERIMENT [OVERWRITE] experiment_name AS [PANDAS/SPARK] delta_sharing_coordinate
-    ```
+  # export the experiment experiment_name to table_name, and add it to share_name
+  export_experiments(experiment_name, table_name, share_name)
 
-    ```python
-    %%arcuate_import_model
-    CREATE MODEL [OVERWRITE] model_name AS [PANDAS/SPARK] delta_sharing_coordinate
-    ```
+  # export the model model_name to table_name, and add it to share_name
+  export_models(model_name, table_name, share_name)    
+  ```
 
-- Users who prefer Python API instead of IPython magic can leverage these API calls:
+- Recipient of this shared table can load it into MLflow seamlessly:
+  ```python
+  import arcuate
+  import delta_sharing
 
-  - On the provider side
+  df = delta_sharing.load_as_pandas(delta_sharing_coordinate)
 
-    ```python
-    import arcuate
-
-    # export the experiment experiment_name to table_name, and add it to share_name
-    export_experiments(experiment_name, table_name, share_name)
-    
-    # export the model model_name to table_name, and add it to share_name
-    export_models(model_name, table_name, share_name)    
-    ```
-
-  - On the recipient side
-
-    ```python
-    import arcuate
-    import delta_sharing
-
-    df = delta_sharing.load_as_pandas(delta_sharing_coordinate)
-    
-    # import the shared table as experiment
-    import_experiments(df, experiment_name)
-    # or import the model
-    import_models(df, model_name)
-    ```
+  # import the shared table as experiment_name
+  import_experiments(df, experiment_name)
+  # or import the model_name
+  import_models(df, model_name)
+  ```
 
 ## Project support
 Please note that all projects in the /databrickslabs github account are provided for your exploration only, and are not formally supported by Databricks with Service Level Agreements (SLAs). They are provided AS-IS and we do not make any guarantees of any kind. Please do not submit a support ticket relating to any issues arising from the use of these projects.
