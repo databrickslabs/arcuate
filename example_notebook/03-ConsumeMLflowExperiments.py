@@ -17,15 +17,15 @@ client.list_all_tables()
 
 # COMMAND ----------
 
-# MAGIC %%arcuate_import_experiment
+# MAGIC %%arcuate
 # MAGIC create experiment '/Users/vuong.nguyen+uc@databricks.com/my_test_experiment' as pandas '/dbfs/FileStore/ml_sharing_recipient.share#ml_sharing.default.delta_sharing_ml_experiment'
 
 # COMMAND ----------
 
-# MAGIC %%arcuate_import_experiment
+# MAGIC %%arcuate
 # MAGIC create experiment '/Users/vuong.nguyen+uc@databricks.com/my_test_experiment' as pandas '/dbfs/FileStore/ml_sharing_recipient.share#ml_sharing.default.delta_sharing_ml_experiment'
 
 # COMMAND ----------
 
-# MAGIC %%arcuate_import_experiment
-# MAGIC create experiment overwrite '/Users/vuong.nguyen+uc@databricks.com/my_test_experiment' as pandas '/dbfs/FileStore/ml_sharing_recipient.share#ml_sharing.default.delta_sharing_ml_experiment'
+# MAGIC %%arcuate
+# MAGIC create or replace experiment '/Users/vuong.nguyen+uc@databricks.com/my_test_experiment' as pandas '/dbfs/FileStore/ml_sharing_recipient.share#ml_sharing.default.delta_sharing_ml_experiment'

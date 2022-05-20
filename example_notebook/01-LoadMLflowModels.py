@@ -12,7 +12,7 @@ from arcuate import ArcuateMagic
 
 # COMMAND ----------
 
-# MAGIC %%arcuate_export_model
+# MAGIC %%arcuate
 # MAGIC create share 'ml_sharing' with table 'vuongnguyen.default.delta_sharing_ml_model' from model 'income-prediction-model'
 
 # COMMAND ----------
