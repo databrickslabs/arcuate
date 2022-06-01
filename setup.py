@@ -35,5 +35,5 @@ setup(
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
-    url="https://databricks.com/",
+    url="https://databricks.com/learn/labs",
 )
