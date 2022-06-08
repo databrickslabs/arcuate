@@ -1,6 +1,5 @@
 cloudpickle==1.6.0
 delta-sharing==0.4.0
-sqlparse==0.4.2
 mlflow==1.24.0
 black==22.3.0
 protobuf~=3.19.0
