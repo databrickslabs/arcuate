@@ -1,15 +1,19 @@
-name: 'coverage'
+name: Coverage Tests
 on:
+  push:
+    branches:
+      - main
+      - release
   pull_request:
     branches:
-      - master
-      - main
+      - '**'
+
 jobs:
   coverage:
     runs-on: ubuntu-latest
     steps:
       - name: Python Cov
-        uses: orgoro/coverage/v2
+        uses: orgoro/coverage@v2
         with:
           coverageFile: ./coverage/coverage.xml
           token: ${{ secrets.GITHUB_TOKEN }}
