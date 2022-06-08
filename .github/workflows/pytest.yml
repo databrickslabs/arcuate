@@ -37,3 +37,7 @@ jobs:
         run: python -m pytest --import-mode=append tests/
       - name: Run lint test
         run: ./dev/lint-python
+      - name: Run test coverage
+        run:
+          mkdir ./coverage/
+          pytest --cov-report xml:./coverage/coverage.xml
