@@ -38,6 +38,6 @@ jobs:
       - name: Run lint test
         run: ./dev/lint-python
       - name: Run test coverage
-        run:
+        run: |
           mkdir ./coverage/
           pytest --cov-report xml:./coverage/coverage.xml
