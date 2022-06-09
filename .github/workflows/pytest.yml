@@ -42,7 +42,5 @@ jobs:
           mkdir ./coverage/
           pytest --cov-report xml:./coverage/coverage.xml
       - name: Python Cov
-        uses: orgoro/coverage@v2
-        with:
-          coverageFile: ./coverage/coverage.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
+        run:
+          coverage run --source=arcuate -m pytest -v tests && coverage report -m
