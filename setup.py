@@ -27,7 +27,7 @@ setup(
         "pandas",
         "cloudpickle==1.6.0",
         "delta-sharing==0.4.0",
-        "mlflow-skinny==1.23.1",
+        "mlflow-skinny==1.26.1",
     ],
     classifiers=[
         'Programming Language :: Python :: 3',
