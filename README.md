@@ -4,8 +4,8 @@
 ___
 
 [![DBR](https://img.shields.io/badge/DBR-10.4_ML-green)]()
-[![PyTest](https://github.com/databricks/arcuate/actions/workflows/pytest.yml/badge.svg?branch=main)](https://github.com/databricks/arcuate/actions/workflows/pytest.yml)
-[![Build arcuate project](https://github.com/databricks/arcuate/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/databricks/arcuate/actions/workflows/build.yml)
+[![PyTest](https://github.com/databrickslabs/arcuate/actions/workflows/pytest.yml/badge.svg?branch=main)](https://github.com/databrickslabs/arcuate/actions/workflows/pytest.yml)
+[![Build arcuate project](https://github.com/databrickslabs/arcuate/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/databrickslabs/arcuate/actions/workflows/build.yml)
 
 ## Model exchange via Delta Sharing
 
@@ -32,12 +32,14 @@ The project name takes inspiration from arcuate delta - the wide fan-shaped rive
 - Export MLflow experiments & models to a Delta table and add it to a share, using Python APIs
   ```python
   import arcuate
+  client = MlflowClient()
+  spark = SparkSession.builder.getOrCreate()
 
   # export the experiment experiment_name to table_name, and add it to share_name
-  export_experiments(experiment_name, table_name, share_name)
+  provider.export_experiments(client, spark, experiment_name, table_name, share_name)
 
   # export the model model_name to table_name, and add it to share_name
-  export_models(model_name, table_name, share_name)    
+  provider.export_models(client, spark, model_name, table_name, share_name)    
   ```
 
 - Recipient of this shared table can load it into MLflow seamlessly:
@@ -45,12 +47,14 @@ The project name takes inspiration from arcuate delta - the wide fan-shaped rive
   import arcuate
   import delta_sharing
 
+  client = MlflowClient()
+  spark = SparkSession.builder.getOrCreate()
   df = delta_sharing.load_as_pandas(delta_sharing_coordinate)
 
   # import the shared table as experiment_name
-  import_experiments(df, experiment_name)
+  recipient.import_experiments(client, df, experiment_name)
   # or import the model_name
-  import_models(df, model_name)
+  recipient.import_models(client, df, model_name)
   ```
 
 ## Project support
