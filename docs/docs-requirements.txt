@@ -5,5 +5,5 @@ pandoc==2.0.1
 ipython==8.0.1
 sphinxcontrib-fulltoc==1.2.0
 livereload==2.6.3
-autodocsumm==0.2.7
+autodocsumm==0.2.8
 sphinx-tabs==3.2.0
