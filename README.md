@@ -31,7 +31,7 @@ The project name takes inspiration from arcuate delta - the wide fan-shaped rive
 - Train model in Databricks (or elsewhere), store it in MLflow
 - Export MLflow experiments & models to a Delta table and add it to a share, using Python APIs
   ```python
-  import arcuate
+  from arcuate import *
   client = MlflowClient()
   spark = SparkSession.builder.getOrCreate()
 
@@ -44,7 +44,7 @@ The project name takes inspiration from arcuate delta - the wide fan-shaped rive
 
 - Recipient of this shared table can load it into MLflow seamlessly:
   ```python
-  import arcuate
+  from arcuate import *
   import delta_sharing
 
   client = MlflowClient()
