@@ -25,7 +25,7 @@ setup(
     python_requires=">=3.8",
     install_requires=[
         "pandas",
-        "cloudpickle==1.6.0",
+        "cloudpickle==2.1.0",
         "delta-sharing==0.4.0",
         "mlflow-skinny==1.26.1",
     ],
