@@ -1,5 +1,5 @@
 pytest==7.1.2
-pyspark==3.2.1
+pyspark==3.2.2
 pytest-mock==3.7.0
 pytest-cov==3.0.0
 IPython==8.1.1
