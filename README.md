@@ -23,11 +23,7 @@ The project name takes inspiration from arcuate delta - the wide fan-shaped rive
 
 ## How to use:
 
-- Install the library
-  ```python
-  pip install arcuate
-  ```
-
+- Install the library from git sources. **We don't expose a PyPI package for this library at the moment, and if you find any - it's a security risk for you!**
 - Train model in Databricks (or elsewhere), store it in MLflow
 - Export MLflow experiments & models to a Delta table and add it to a share, using Python APIs
   ```python
