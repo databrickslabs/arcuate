@@ -1,3 +1,5 @@
+# *THIS PROJECT IS NOW DEPRECATED, USE [DB MODEL SHARING INSTEAD](https://docs.databricks.com/aws/en/data-sharing/)*
+
 # Arcuate
 
 *Deltas with a triangular or fan shape are called* **arcuate** *(arc-like) deltas. The Nile River forms an arcuate delta as it empties into the Mediterranean Sea.*
